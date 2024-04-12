@@ -10,4 +10,7 @@ public class PopupNotificationStrategy implements NotificationStrategy {
         String javascriptCode = "alert('" + message + "');";
         System.out.println(javascriptCode); // This will print the JavaScript code to the console (you can replace with appropriate logging)
     }
+    
 }
+
+
