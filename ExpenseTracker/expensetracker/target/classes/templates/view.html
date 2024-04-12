@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Expense</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa; /* Light grey background */
+            color: #333; /* Dark grey text color */
+            padding: 20px;
+        }
+        h1 {
+            color: #555; /* Dark grey heading color */
+            margin-bottom: 20px;
+        }
+        .expense-details {
+            background-color: #fff; /* White background for expense details box */
+            border: 1px solid #ddd; /* Light grey border */
+            padding: 20px;
+            border-radius: 5px; /* Rounded corners */
+        }
+        .expense-details p {
+            margin-bottom: 10px;
+        }
+        a {
+            color: #007bff; /* Blue link color */
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .receipt-image {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">Expense Tracker</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <!-- Add more navigation links here -->
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <h1 class="mt-4">Expense Details</h1>
+        <!-- Display expense details -->
+        <div class="expense-details">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Date:</strong> <span th:text="${#dates.format(expense.expenseDate, 'yyyy-MM-dd')}"></span></p>
+                    <p><strong>Amount:</strong> <span th:text="${expense.expenseAmount}"></span></p>
+                    <p><strong>Category:</strong> <span th:text="${expense.expenseCategory}"></span></p>
+                    <p><strong>Transaction Type:</strong> <span th:text="${expense.expenseTransactionType}"></span></p>
+                    <!-- Displaying Receipt Image -->
+                    <p><strong>Receipt:</strong></p>
+                    <img th:src="${expense.expenseReceipt}" alt="Receipt Image" class="receipt-image">
+                </div>
+            </div>
+        </div>
+        <a href="/expenses/all" class="btn btn-secondary mt-3">Back to All Expenses</a>
+        <a th:href="@{/expenses/edit/{id}(id=${expense.id})}" class="btn btn-secondary mt-3 ml-2">Edit Expense</a>
+    </div>
+</body>
+</html>

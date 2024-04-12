@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Expense</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            padding: 20px;
+            background-color: #f8f9fa; /* Light grey background */
+            color: #333; /* Dark grey text color */
+            text-align: center; /* Center-align content */
+        }
+        h1 {
+            color: #555; /* Dark grey heading color */
+            margin-bottom: 20px;
+        }
+        form {
+            background-color: #fff; /* White background for form */
+            padding: 20px;
+            border-radius: 5px; /* Rounded corners */
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1); /* Shadow effect */
+            text-align: left; /* Left-align form content */
+        }
+        label {
+            font-weight: bold; /* Bold label text */
+        }
+        input[type="submit"] {
+            background-color: #333; /* Black submit button background */
+            color: #fff; /* White submit button text color */
+            border: none; /* No border */
+            padding: 10px 20px; /* Padding */
+            border-radius: 5px; /* Rounded corners */
+            cursor: pointer; /* Cursor style */
+        }
+        input[type="submit"]:hover {
+            background-color: #555; /* Darker black on hover */
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">Expense Tracker</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <!-- Add more navigation links here -->
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1>Add Expense</h1>
+        <form th:action="@{/expenses/add}" method="post">
+            <div class="form-group">
+                <label for="userId">User ID:</label>
+                <input type="number" id="userId" name="userId" th:value="${userId}" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="expenseDate">Expense Date:</label>
+                <input type="date" id="expenseDate" name="expenseDate" th:value="${#dates.format(expense.expenseDate, 'yyyy-MM-dd')}" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="expenseAmount">Expense Amount:</label>
+                <input type="number" id="expenseAmount" name="expenseAmount" th:value="${expense.expenseAmount}" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="expenseCategory">Expense Category:</label>
+                <select id="expenseCategory" name="expenseCategory" class="form-control" required>
+                    <option th:each="category : ${T(com.example.model.ExpenseCategory).values()}" 
+                            th:value="${category}" 
+                            th:text="${#strings.capitalize(category.name())}">
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="expenseTransactionType">Transaction Type:</label>
+                <select id="expenseTransactionType" name="expenseTransactionType" class="form-control" required>
+                    <option th:each="transactionType : ${T(com.example.model.ExpenseTransactionType).values()}" 
+                            th:value="${transactionType}" 
+                            th:text="${#strings.capitalize(transactionType.name())}">
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="expenseReceipt">Receipt:</label>
+                <input type="file" id="expenseReceipt" name="expenseReceipt" class="form-control-file">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

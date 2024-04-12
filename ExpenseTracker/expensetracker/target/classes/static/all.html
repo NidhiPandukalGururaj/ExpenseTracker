@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Expenses</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            padding: 20px;
+            background-color: #f8f9fa; /* Light grey background */
+            color: #333; /* Dark grey text color */
+            text-align: center; /* Center-align content */
+        }
+        h1 {
+            color: #555; /* Dark grey heading color */
+            margin-bottom: 20px;
+        }
+        .expense-block {
+            background-color: #fff; /* White background for each block */
+            border-radius: 5px; /* Rounded corners */
+            margin-bottom: 20px; /* Spacing between blocks */
+        }
+        .expense-details {
+            padding: 20px;
+            text-align: left; /* Left-align content within each block */
+        }
+        .btn {
+            background-color: #333; /* Black button background */
+            color: #fff; /* White button text color */
+        }
+        .btn:hover {
+            background-color: #555; /* Darker black on hover */
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">Expense Tracker</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <!-- Add more navigation links here -->
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1 class="mt-5">All Expenses Of This Month</h1>
+        <div class="row">
+            <!-- Loop through expenses and display them in blocks -->
+            <div th:each="expense : ${expenses}" class="col-md-6">
+                <div class="expense-block">
+                    <div class="expense-details">
+                        <p><strong>Date:</strong> <span th:text="${#dates.format(expense.expenseDate, 'yyyy-MM-dd')}"></span></p>
+                        <p><strong>Amount:</strong> <span th:text="${expense.expenseAmount}"></span></p>
+                        <p><strong>Category:</strong> <span th:text="${expense.expenseCategory}"></span></p>
+                        <p><strong>Transaction Type:</strong> <span th:text="${expense.expenseTransactionType}"></span></p>
+                        <p><strong>Receipt:</strong> <a th:href="@{/receipts/{id}(id=${expense.id})}" class="btn btn-sm">View Receipt</a></p>
+                        <div>
+                            <a th:href="@{/expenses/edit/{id}(id=${expense.id})}" class="btn btn-sm btn-secondary">Edit</a>
+                            <a th:href="@{/expenses/delete/{id}(id=${expense.id})}" class="btn btn-sm btn-secondary">Delete</a>
+                            <a th:href="@{/expenses/view/{id}(id=${expense.id})}" class="btn btn-sm btn-secondary">View</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+           
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

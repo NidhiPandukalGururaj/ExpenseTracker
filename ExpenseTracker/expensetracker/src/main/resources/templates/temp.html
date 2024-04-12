@@ -1,0 +1,11 @@
+<html>
+    <head>
+        Temporary
+    </head>
+    <body>
+        Gliter in the sky gliter in my  eyes.
+        <img 
+                     th:src="@{'data:image/jpeg;base64,' + ${#strings.bytesToBase64(#strings.hexToBytes('0x433A55736572734E69646869446F776E6C6F61647308696C6C2E706E67'))}}"
+                     alt="Receipt Image" class="receipt-image">
+    </body>
+</html>

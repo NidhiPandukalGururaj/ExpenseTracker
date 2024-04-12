@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense Tracker</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Custom CSS -->
+  <style>
+    body {
+      font-family: 'Segoe Script', 'Lucida Handwriting', cursive; /* Use calligraphic fonts */
+      color: black; /* Set text color to black */
+      background-color: #f8f9fa; /* Set background color to light grey */
+    }
+    .container {
+      max-width: 800px; /* Limit container width */
+    }
+    .card {
+      border: none; /* Remove card border */
+      background-color: #f8f9fa; /* Set card background color to light grey */
+    }
+    .card-title {
+      font-size: 2rem; /* Increase title font size */
+      font-weight: bold; /* Make title bold */
+      color: #343a40; /* Set title color to dark grey */
+    }
+    .card-text {
+      font-size: 1.2rem; /* Increase text font size */
+    }
+    .btn {
+      background-color: #343a40; /* Set button background color to dark grey */
+      color: white !important; /* Set button text color to white */
+      border: none; /* Remove button border */
+    }
+    .btn:hover {
+      background-color: #212529; /* Darken button background color on hover */
+    }
+  </style>
+</head>
+<body class="bg-light">
+  <div class="modal fade" id="notificationModal" tabindex="-1" role="dialog" aria-labelledby="notificationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="notificationModalLabel">Your Expense Tracker here!!</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Check your notifications here.</p>
+          <!-- Add notification content here -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container py-5">
+    <h1 class="text-center mb-4">Expense Tracker</h1>
+    <div class="row">
+      <div class="col-md-16 mx-auto"> <!-- Adjusted column size to fit content -->
+        <div class="card-deck">
+          <div class="card border-dark">
+            <div class="card-body">
+              <h5 class="card-title text-dark">View Expenses</h5>
+              <p class="card-text text-muted">View all your expenses of this month.</p>
+              <a href="/expenses/all" class="btn">View</a>
+            </div>
+          </div>
+          <div class="card border-dark">
+            <div class="card-body">
+              <h5 class="card-title text-dark">Add New Expense</h5>
+              <p class="card-text text-muted">Add a new expense record.</p>
+              <a href="/expenses/add" class="btn">Add</a>
+            </div>
+          </div>
+          <div class="card border-dark">
+            <div class="card-body">
+              <h5 class="card-title text-dark">Notifications</h5>
+              <p class="card-text text-muted">See your notifications.</p>
+              <a href="/expenses/notifications" class="btn">See</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS and jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <!-- Script to trigger modal on page load -->
+  <script>
+    $(document).ready(function() {
+      $('#notificationModal').modal('show');
+    });
+  </script>
+</body>
+</html>
