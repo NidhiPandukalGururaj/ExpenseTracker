@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { padding: 20px; background-color: #f8f9fa; color: #333; text-align: center; }
+        .container { max-width: 400px; margin-top: 50px; }
+        .btn { background-color: #333; color: #fff; }
+        .btn:hover { background-color: #555; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Register</h1>
+        <!-- Update action to use Thymeleaf for form submission -->
+        <form th:action="@{/api/users/register}" th:object="${user}" method="POST">
+            <input type="text" class="form-control mb-2" th:field="*{userName}" placeholder="Username" required>
+            <input type="text" class="form-control mb-2" th:field="*{firstName}" placeholder="First Name" required>
+            <input type="text" class="form-control mb-2" th:field="*{lastName}" placeholder="Last Name" required>
+            <input type="email" class="form-control mb-2" th:field="*{email}" placeholder="Email" required>
+            <input type="password" class="form-control mb-2" th:field="*{password}" placeholder="Password" required>
+            <select class="form-control mb-2" th:field="*{gender}" required>
+                <option value="MALE">Male</option>
+                <option value="FEMALE">Female</option>
+                <option value="OTHER">Other</option>
+            </select>
+            <button type="submit" class="btn btn-primary mt-3">Register</button>
+        </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
