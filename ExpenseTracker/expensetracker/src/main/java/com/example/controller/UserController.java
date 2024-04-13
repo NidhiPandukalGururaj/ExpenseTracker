@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import com.example.dto.UserLoginDto;
 import com.example.dto.UserRegistrationDto;
 
 @RestController
@@ -69,6 +71,35 @@ public class UserController {
 
         return user;
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(@RequestBody UserLoginDto loginDto) {
+        logger.info("Received login data: {}", loginDto);
+
+        // Check if either username or email is provided
+        if (loginDto.getUsername() == null && loginDto.getEmail() == null) {
+            logger.error("Neither username nor email provided.");
+            return ResponseEntity.badRequest().body("Either username or email must be provided.");
+        }
+        User user = null;
+        if (loginDto.getUsername() != null) {
+            user = userService.getUserByUsername(loginDto.getUsername());
+        } else if (loginDto.getEmail() != null) {
+            user = userService.getUserByEmail(loginDto.getEmail());
+        }
+
+        if (user == null || !user.getPassword().equals(loginDto.getPassword())) {
+            logger.error("Invalid username/email or password.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username/email or password.");
+        }
+
+        logger.info("User logged in successfully: {}", user);
+        return ResponseEntity.ok(user);
+    }
+
+
+
+
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody User userDetails) {
         User updatedUser = userService.updateUser(id, userDetails);
