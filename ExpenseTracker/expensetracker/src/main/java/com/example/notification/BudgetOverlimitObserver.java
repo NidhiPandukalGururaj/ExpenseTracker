@@ -1,7 +1,7 @@
 package com.example.notification;
 
 import com.example.repository.ExpenseRepository;
-import com.example.repository.IncomeRepository;
+import com.example.repository.IncomeSourceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.example.model.*;
@@ -18,7 +18,7 @@ public class BudgetOverlimitObserver implements NotificationObserver {
     private ExpenseRepository expenseRepository;
 
     @Autowired
-    private IncomeRepository incomeRepository;
+    private IncomeSourceRepository incomeRepository;
 
     @Override
     public void notify(String message) {

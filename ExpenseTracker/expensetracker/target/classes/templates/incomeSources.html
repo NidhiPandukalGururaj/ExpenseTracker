@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Income Sources</title>
+</head>
+<body>
+    <h1>Income Sources</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Source Name</th>
+                <th>Annual Income</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="incomeSource : ${incomeSources}">
+                <td th:text="${incomeSource.sourceName}"></td>
+                <td th:text="${incomeSource.annualIncome}"></td>
+                <td>
+                    <form th:action="@{/income-sources/delete/{incomeSourceId}(incomeSourceId=${incomeSource.incomeSourceId})}" method="post">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <a th:href="@{/income-sources/add}">Add New Income Source</a>
+</body>
+</html>

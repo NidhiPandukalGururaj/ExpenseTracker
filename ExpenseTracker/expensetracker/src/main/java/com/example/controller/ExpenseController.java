@@ -3,7 +3,7 @@ package com.example.controller;
 import com.example.model.*;
 
 import com.example.repository.ExpenseRepository;
-import com.example.repository.IncomeRepository;
+import com.example.repository.IncomeSourceRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,7 +26,7 @@ public class ExpenseController {
     @Autowired
     private ExpenseRepository expenseRepository;
     @Autowired
-    private IncomeRepository incomeRepository;
+    private IncomeSourceRepository incomeRepository;
 
     @GetMapping("/")
     public String showHomePage(Model model) {
