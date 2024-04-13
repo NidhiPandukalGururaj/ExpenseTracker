@@ -98,17 +98,13 @@
                     if (data.hasOwnProperty('userId')) {
                         // Set the flag in localStorage to indicate that the user is logged in
                         localStorage.setItem("logged", "true");
-
-                        // Redirect the user to the home page
                         window.location.href = "/";
                     } else {
-                        // Handle login failure
                         alert("Login failed. Please check your credentials.");
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    // Handle login failure or network error
                     alert("An error occurred. Please try again later.");
                 });
             });

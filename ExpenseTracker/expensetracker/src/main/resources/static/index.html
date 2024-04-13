@@ -96,7 +96,7 @@
   <!-- Script to trigger modal on page load -->
   <script>
 document.addEventListener("DOMContentLoaded", function() {
-      var userId = localStorage.getItem('userId');
+      var userId = localStorage.getItem('user_id');
       if (!userId) {
         window.location.href = '/register'; // Redirect to the registration page if userId is not found
       }
