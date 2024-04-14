@@ -15,7 +15,6 @@ public interface IncomeSourceRepository extends JpaRepository<IncomeSource, Long
 
     IncomeSource findByUserId(Long userId);
 
-    @Query("SELECT SUM(i.annualIncome) FROM Income i WHERE i.userId = :userId")
+    @Query("SELECT SUM(i.annualIncome) FROM IncomeSource i WHERE i.userId = :userId")
     Double findTotalIncomeByUserId(Long userId);
 }
-
