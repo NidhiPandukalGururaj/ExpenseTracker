@@ -52,7 +52,8 @@
             <a class="nav-link" href="/profile">Profile</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/income-sources">Income Sources</a>
+            <a class="nav-link" href="#" id="incomeSourcesLink">Income Sources</a>
+
           </li>
         </ul>
       </div>
@@ -116,10 +117,13 @@
   <script>
 document.addEventListener("DOMContentLoaded", function() {
       var userId = localStorage.getItem('user_id');
-      if (!userId) {
-        window.location.href = '/register'; // Redirect to the registration page if userId is not found
+      if (userId) {
+          $('#incomeSourcesLink').attr('href', '/income-sources/user/' + userId);
+      } else {
+          window.location.href = '/register'; // Redirect to the registration page if userId is not found
       }
     });
+
 
 
     $(document).ready(function() {

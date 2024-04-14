@@ -31,4 +31,15 @@ public class AuthController {
         model.addAttribute("user", new User());  // Assuming you have a User class that matches the form fields
         return "register";  // This corresponds to src/main/resources/templates/register.html
     }
+
+     /**
+     * Handle GET requests for the profile page.
+     * @param model Model object to pass data to the view.
+     * @return the name of the Thymeleaf template to render the profile view.
+     */
+    @GetMapping("/profile")
+    public String showProfilePage(Model model) {
+        // Add logic to retrieve profile data and add it to the model if needed
+        return "profile";  // This corresponds to src/main/resources/templates/profile.html
+    }
 }

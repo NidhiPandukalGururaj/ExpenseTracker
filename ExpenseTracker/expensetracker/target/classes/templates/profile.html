@@ -1,84 +1,118 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>User Management</title>
+    <title>User Profile</title>
+    
     <script>
-        // Retrieve user details from the API and populate the form fields
         document.addEventListener("DOMContentLoaded", function () {
             var userId = localStorage.getItem("user_id");
             if (userId) {
-                fetch(`/api/users/details/${userID}`)
+                fetch(`/api/users/details/${userId}`)
                     .then(response => response.json())
                     .then(data => {
-                        document.querySelector('form[name="updateUserForm"] input[name="id"]').value = data.userId;
-                        document.querySelector('form[name="updateUserForm"] input[name="userName"]').value = data.userName;
-                        document.querySelector('form[name="updateUserForm"] input[name="firstName"]').value = data.firstName;
-                        document.querySelector('form[name="updateUserForm"] input[name="lastName"]').value = data.lastName;
-                        document.querySelector('form[name="updateUserForm"] input[name="email"]').value = data.email;
-                        document.querySelector('form[name="updateUserForm"] input[name="gender"]').value = data.gender;
+                        document.querySelector('input[name="userName"]').value = data.userName;
+                        document.querySelector('input[name="firstName"]').value = data.firstName;
+                        document.querySelector('input[name="lastName"]').value = data.lastName;
+                        document.querySelector('input[name="email"]').value = data.email;
+                        document.querySelector('input[name="gender"]').value = data.gender;
                     })
                     .catch(error => console.error('Error fetching user details:', error));
             }
         });
     </script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .profile-container {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .icon-placeholder {
+            width: 100px;
+            height: 100px;
+            background-color: #ddd;
+            border-radius: 50%;
+            display: block;
+            margin: 10px auto;
+        }
+        .user-info {
+            text-align: center;
+        }
+        .user-info h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .user-info p {
+            color: #666;
+            font-size: 14px;
+        }
+        .details-list {
+            list-style: none;
+            padding: 0;
+        }
+        .details-list li {
+            margin-bottom: 10px;
+        }
+        .details-list label {
+            font-weight: bold;
+            display: block;
+        }
+        .details-list input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+            display: block;
+        }
+    </style>
 </head>
 <body>
 
-<h1>User Management</h1>
-
-<h2>Get User Details by ID</h2>
-<form th:action="@{/api/users/details}" method="get">
-    User ID: <input type="text" name="id"><br>
-    <input type="submit" value="Get Details">
-</form>
-
-<h2>Create User</h2>
-<form th:action="@{/api/users}" method="post">
-    Username: <input type="text" name="userName"><br>
-    First Name: <input type="text" name="firstName"><br>
-    Last Name: <input type="text" name="lastName"><br>
-    Email: <input type="email" name="email"><br>
-    Password: <input type="password" name="password"><br>
-    Gender: <input type="text" name="gender"><br>
-    <input type="submit" value="Create User">
-</form>
-
-<h2>Register User</h2>
-<form th:action="@{/api/users/action/register}" method="post">
-    Username: <input type="text" name="userName"><br>
-    First Name: <input type="text" name="firstName"><br>
-    Last Name: <input type="text" name="lastName"><br>
-    Email: <input type="email" name="email"><br>
-    Password: <input type="password" name="password"><br>
-    Gender: <input type="text" name="gender"><br>
-    <input type="submit" value="Register User">
-</form>
-
-<h2>Login User</h2>
-<form th:action="@{/api/users/login}" method="post">
-    Username/Email: <input type="text" name="username"><br>
-    Password: <input type="password" name="password"><br>
-    <input type="submit" value="Login">
-</form>
-
-<h2>Update User</h2>
-<form name="updateUserForm" th:action="@{/api/users}" method="put">
-    User ID: <input type="text" name="id"><br>
-    Username: <input type="text" name="userName"><br>
-    First Name: <input type="text" name="firstName"><br>
-    Last Name: <input type="text" name="lastName"><br>
-    Email: <input type="email" name="email"><br>
-    Password: <input type="password" name="password"><br>
-    Gender: <input type="text" name="gender"><br>
-    <input type="submit" value="Update User">
-</form>
-
-<h2>Delete User</h2>
-<form th:action="@{/api/users}" method="delete">
-    User ID: <input type="text" name="id"><br>
-    <input type="submit" value="Delete User">
-</form>
-
+<div class="profile-container">
+    <div class="icon-placeholder"></div>
+    <div class="user-info">
+        <h1>Jane Doe</h1>
+        <p>Software Engineer</p>
+    </div>
+    <ul class="details-list">
+        <li>
+            <label for="userName">Username:</label>
+            <input type="text" name="userName" id="userName" value="janedoe" readonly>
+        </li>
+        <li>
+            <label for="email">Email:</label>
+            <input type="email" name="email" id="email" value="jane.doe@example.com" readonly>
+        </li>
+        <li>
+            <label for="firstName">First Name:</label>
+            <input type="text" name="firstName" id="firstName" value="Jane" readonly>
+        </li>
+        <li>
+            <label for="lastName">Last Name:</label>
+            <input type="text" name="lastName" id="lastName" value="Doe" readonly>
+        </li>
+        <li>
+            <label for="gender">Gender:</label>
+            <input type="text" name="gender" id="gender" value="Female" readonly>
+        </li>
+    </ul>
+    <button onclick="enableEditing()">Edit Details</button>
+</div>
+<script>
+    function enableEditing() {
+        document.querySelectorAll('input').forEach(input => input.removeAttribute('readonly'));
+    }
+</script>
 </body>
 </html>
