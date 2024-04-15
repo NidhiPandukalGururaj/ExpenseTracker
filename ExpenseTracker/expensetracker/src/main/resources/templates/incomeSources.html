@@ -3,6 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <title>Income Sources</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        table {
+            width: 100%;
+            margin: 20px 0;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .delete-button {
+            color: #fff;
+            background-color: #f44336;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        /* Modal */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        .modal-content {
+    background-color: #fefefe;
+    margin: 5% auto; /* Reduced margin */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%;
+    box-sizing: border-box; /* Ensure padding and borders are included */
+}
+
+.design {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px; /* Adjust padding */
+    box-sizing: border-box; /* Ensure padding and borders are included */
+    max-height: 80vh; /* Limit the height to prevent overflow */
+    overflow: auto; /* Enable scroll if needed */
+}
+
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .design{
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
 </head>
 <body>
     <h1>Income Sources</h1>
@@ -20,12 +102,82 @@
                 <td th:text="${incomeSource.annualIncome}"></td>
                 <td>
                     <form th:action="@{/income-sources/delete/{incomeSourceId}(incomeSourceId=${incomeSource.incomeSourceId})}" method="post">
-                        <button type="submit">Delete</button>
+                        <button type="submit" class="delete-button">Delete</button>
                     </form>
                 </td>
             </tr>
         </tbody>
     </table>
-    <a th:href="@{/income-sources/add}">Add New Income Source</a>
+    <!-- Trigger/Open The Modal -->
+    <button id="myBtn">Add New Income Source</button>
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+        <div style="display: flex;align-items: center; justify-content: space-between;">
+            <p> <h1>Add new income source</h1></p>
+            <span class="close">&times;</span>
+        </div>
+            <div class="design" style="display: flex; justify-content: center; margin-top: 10px; ">
+                <form action="/income-sources/add" method="post" style="display: flex; flex-direction: column; width: 300px; padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
+                    <input type="hidden" th:field="*{userId}" />
+                    <label for="sourceName" style="margin-bottom: 10px;">Source Name:</label>
+                    <input type="text" id="sourceName" name="sourceName" required style="margin-bottom: 10px; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                    <label for="annualIncome" style="margin-bottom: 10px;">Annual Income:</label>
+                    <input type="number" id="annualIncome" name="annualIncome" required style="margin-bottom: 10px; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                    <button type="submit" style="padding: 8px 16px; background-color: #007bff; color: #fff; border: none; border-radius: 4px; cursor: pointer;">Add</button>
+                </form>
+            </div>            
+        </div>
+    </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+    var modal = document.getElementById("myModal");
+    var btn = document.getElementById("myBtn");
+    var span = document.getElementsByClassName("close")[0];
+
+    btn.onclick = function() {
+        modal.style.display = "flex";
+    };
+    span.onclick = function() {
+        modal.style.display = "none";
+    };
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    };
+
+    var form = document.querySelector('form');
+    form.onsubmit = function(event) {
+        event.preventDefault(); // Correct use of preventDefault to stop page navigation.
+
+        var formData = new FormData(form);
+        
+        // Making an AJAX request to submit the form data.
+        fetch(form.action, {
+            method: 'POST',
+            body: formData
+        }).then(response => {
+            if (response.ok) {
+                return response.json(); // Ensure the server responds with a JSON.
+            } else {
+                throw new Error('Server responded with status: ' + response.status);
+            }
+        }).then(data => {
+            console.log('Success:', data);
+            alert('Income source added successfully!');
+            form.reset();
+            modal.style.display = 'none';
+        }).catch((error) => {
+            console.error('Error:', error);
+            alert('Failed to add income source.');
+        });
+    };
+});
+
+        </script>
+        
 </body>
 </html>

@@ -27,17 +27,13 @@ public class IncomeSourceController {
         return "incomeSources";
     }
 
-    @GetMapping("/add")
-    public String showAddIncomeSourceForm(Model model) {
-        model.addAttribute("incomeSource", new IncomeSource());
-        return "addIncomeSource";
-    }
-
-    @PostMapping("/add")
-    public String addIncomeSource(@ModelAttribute("incomeSource") IncomeSource incomeSource) {
-        incomeSourceService.addIncomeSource(incomeSource);
-        return "redirect:/income-sources/user/" + incomeSource.getUserId();
-    }
+@PostMapping("/user/{userId}")
+public String addIncomeSource(@ModelAttribute("incomeSource") IncomeSource incomeSource, @RequestParam("userId") Long userId) {
+    System.out.println("Received userId: " + userId);  // Debug log
+    incomeSource.setUserId(userId);
+    incomeSourceService.addIncomeSource(incomeSource);
+    return "incomeSources";
+}
 
     @GetMapping("/delete/{incomeSourceId}")
     public String deleteIncomeSource(@PathVariable("incomeSourceId") Long incomeSourceId) {

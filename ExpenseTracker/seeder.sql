@@ -66,3 +66,13 @@ INSERT INTO income_sources (user_id, source_name, annual_income) VALUES
 (3, 'Freelance Writing', 40000.00),
 (4, 'Digital Marketing', 72000.00),
 (5, 'Consulting', 110000.00);
+
+
+
+
+INSERT INTO income_sources (user_id, source_name, annual_income) VALUES
+(15, 'Full-time Job', 500000.00),
+(15, 'Part-time Freelance', 150000.00),
+(15, 'Rental Property', 800000.00),
+(15, 'Stock Dividends', 300000.00),
+(15, 'Online Sales', 10000.00);
