@@ -3,14 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Income Sources</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe Script', 'Lucida Handwriting', cursive; 
         }
+
         table {
             width: 100%;
-            margin: 20px 0;
-            border-collapse: collapse;
+            margin: 2rem 4rem;
+            margin-bottom: 1rem;
+            border-radius: 2rem solid blue;border: 2px solid #007bff;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
         }
         th, td {
             padding: 8px;
@@ -26,6 +31,7 @@
             border: none;
             padding: 10px;
             cursor: pointer;
+            border-radius: 2rem;
         }
         /* Modal */
         .modal {
@@ -72,7 +78,6 @@
             cursor: pointer;
         }
     </style>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -93,7 +98,10 @@
           </div>
         </div>
     </nav>
-    <h1>Income Sources</h1>
+    <div style="align-items: center; justify-content: center; text-align: center;"> 
+    <h1 style="margin-top: 1rem; align-items: center; justify-content: center;">Income Sources</h1>
+</div>
+<div style="display: flex;align-items: center;">
     <table>
         <thead>
             <tr>
@@ -112,8 +120,9 @@
             </tr>
         </tbody>
     </table>
+</div>
     <!-- Trigger/Open The Modal -->
-    <button id="myBtn">Add New Income Source</button>
+    <button id="myBtn" style="display: flex; border: #007bff; border-radius: 2rem; margin: 4rem; background-color: rgb(129, 129, 234);">Add New Income Source</button>
 
     <!-- The Modal -->
     <div id="myModal" class="modal">

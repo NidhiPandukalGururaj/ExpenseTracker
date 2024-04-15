@@ -1,5 +1,7 @@
 package com.example.dto;
 
+import java.math.BigDecimal;
+
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
@@ -28,7 +30,7 @@ public class IncomeSourceDTO {
         this.sourceName = sourceName;
     }
 
-    public Double getAnnualIncome() {
+    public @NotNull(message = "Annual income cannot be null") @Min(value = 0, message = "Annual income must be non-negative") Double getAnnualIncome() {
         return annualIncome;
     }
 
