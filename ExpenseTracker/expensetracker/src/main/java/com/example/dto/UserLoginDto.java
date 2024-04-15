@@ -5,11 +5,7 @@ public class UserLoginDto {
     private String email;
     private String password;
 
-    // Constructors, getters, and setters
-
-    public UserLoginDto() {
-    }
-
+   
     public UserLoginDto(String username, String email, String password) {
         this.username = username;
         this.email = email;

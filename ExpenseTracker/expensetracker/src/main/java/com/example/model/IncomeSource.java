@@ -60,8 +60,8 @@ public class IncomeSource {
         return annualIncome;
     }
 
-    public void setAnnualIncome(BigDecimal annualIncome) {
-        this.annualIncome = annualIncome;
+    public void setAnnualIncome(BigDecimal double1) {
+        this.annualIncome = double1;
     }
 
     @Override
