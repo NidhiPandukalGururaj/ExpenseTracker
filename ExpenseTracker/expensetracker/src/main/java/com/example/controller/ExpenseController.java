@@ -9,7 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.Date;
@@ -28,27 +29,40 @@ public class ExpenseController {
     @Autowired
     private IncomeSourceRepository incomeRepository;
 
-    @GetMapping("/")
-    public String showHomePage(Model model) {
-        return "index";
+    private Long getUserIdFromSession(HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+        System.out.println("user id" + userId);
+        return userId;
     }
 
-    @GetMapping("/all")
-    public String getAllExpenses(Model model) {
-        // Get the current month and year
-        YearMonth currentMonthYear = YearMonth.now();
-        LocalDate firstDayOfMonth = currentMonthYear.atDay(1);
-        LocalDate lastDayOfMonth = currentMonthYear.atEndOfMonth();
+    @GetMapping("/expensedashboard")
+    public String showHomePage(Model model) {
+        return "expensedashboard";
+    }
 
-        // Convert LocalDate to Date
-        Date startDate = java.sql.Date.valueOf(firstDayOfMonth);
-        Date endDate = java.sql.Date.valueOf(lastDayOfMonth);
+    @GetMapping("/")
+    public String showdashboard(Model model) {
+        return "expensedashboard";
+    }
 
-        // Retrieve expenses for the current month
-        List<Expense> expenses = expenseRepository.findByExpenseDateBetween(startDate, endDate);
+    @GetMapping("/all/{userId}")
+    public String getAllExpenses(@PathVariable Long userId, Model model) {
+        if (userId != null) {
+            YearMonth currentMonthYear = YearMonth.now();
+            LocalDate firstDayOfMonth = currentMonthYear.atDay(1);
+            LocalDate lastDayOfMonth = currentMonthYear.atEndOfMonth();
 
-        model.addAttribute("expenses", expenses);
-        return "all";
+            Date startDate = java.sql.Date.valueOf(firstDayOfMonth);
+            Date endDate = java.sql.Date.valueOf(lastDayOfMonth);
+
+            // Retrieve expenses for the specified user and month
+            List<Expense> expenses = expenseRepository.findByUserIdAndExpenseDateBetween(userId, startDate, endDate);
+
+            model.addAttribute("expenses", expenses);
+
+            return "all";
+        }
+        return "redirect:error";
     }
 
     @GetMapping("/view/{id}")
@@ -56,7 +70,7 @@ public class ExpenseController {
         Optional<Expense> expense = expenseRepository.findById(id);
         if (expense.isPresent()) {
             model.addAttribute("expense", expense.get());
-            return "view"; // Update the view name
+            return "view";
         } else {
             return "expenses/error";
         }
@@ -64,13 +78,17 @@ public class ExpenseController {
 
     @GetMapping("/add")
     public String showAddExpenseForm(Expense expense) {
-        return "add"; // Update the view name
+        return "add";
     }
 
     @PostMapping("/add")
-    public String createExpense(@ModelAttribute Expense expense, Model model) {
+    public String createExpense(@ModelAttribute Expense expense, Model model, HttpSession session) {
+        Long userId = getUserIdFromSession(session);
+        if (userId != null) {
+            expense.setUserId(userId);
+        }
         expenseRepository.save(expense);
-        return "redirect:add"; // Update the redirect URL
+        return "redirect:expensedashboard";
     }
 
     @GetMapping("/edit/{id}")
@@ -78,7 +96,7 @@ public class ExpenseController {
         Expense expense = expenseRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Expense ID"));
         model.addAttribute("expense", expense);
-        return "edit"; // Update the view name
+        return "edit";
     }
 
     @PostMapping("/edit/{id}")
@@ -93,56 +111,47 @@ public class ExpenseController {
         existingExpense.setExpenseReceipt(updatedExpense.getExpenseReceipt());
 
         expenseRepository.save(existingExpense);
-        return "redirect:/expenses/all"; // Update the redirect URL
+        return "redirect:/expenses/expensedashboard";
     }
 
     @GetMapping("/delete/{id}")
     public String deleteExpense(@PathVariable Long id, Model model) {
         expenseRepository.deleteById(id);
-        return "redirect:/expenses/all"; // Update the redirect URL
+        return "redirect:/expenses/expensedashboard";
     }
 
-    // Method to check notifications
-    // Method to check notifications
     @GetMapping("/notifications")
     public String checkNotifications(Model model) {
         StringBuilder notificationBuilder = new StringBuilder();
 
-        // Check for unpaid rents
         boolean rentPaid = expenseRepository.existsByExpenseCategoryAndExpenseDateBefore(ExpenseCategory.RENT,
-                new Date()); // Use java.util.Date here
+                new Date());
         if (!rentPaid) {
             notificationBuilder.append("Rent Of This Month Not Paid Yet. ");
         }
 
-        // Check for unpaid EMIs
         boolean emiPaid = expenseRepository.existsByExpenseCategoryAndExpenseDateBefore(ExpenseCategory.EMI,
-                new Date()); // Use java.util.Date here
+                new Date());
         if (!emiPaid) {
             notificationBuilder.append("EMI Of This Month Not Paid Yet. ");
         }
 
-        // Check for unpaid utility bills
         boolean utilityPaid = expenseRepository.existsByExpenseCategoryAndExpenseDateBefore(ExpenseCategory.UTILITY,
-                new Date()); // Use java.util.Date here
+                new Date());
         if (!utilityPaid) {
             notificationBuilder.append("Utility Of This Month Not Paid Yet. ");
         }
 
-        // Check budget overlimit
         YearMonth currentMonthYear = YearMonth.now();
         LocalDate firstDayOfMonth = currentMonthYear.atDay(1);
         LocalDate lastDayOfMonth = currentMonthYear.atEndOfMonth();
 
-        // Convert LocalDate to Date
         Date startDate = java.sql.Date.valueOf(firstDayOfMonth);
         Date endDate = java.sql.Date.valueOf(lastDayOfMonth);
 
-        // Retrieve expenses for the current month
         List<Expense> expenses = expenseRepository.findByExpenseDateBetween(startDate, endDate);
 
-        // Check budget limit based on the user's income
-        Double totalIncome = incomeRepository.findTotalIncomeByUserId(1L); // Assuming userId=1
+        Double totalIncome = incomeRepository.findTotalIncomeByUserId(1L);
         if (totalIncome != null) {
             double monthlyBudget = totalIncome / 12;
             double totalExpenses = expenses.stream()
@@ -158,16 +167,18 @@ public class ExpenseController {
 
         String notifications = notificationBuilder.toString().trim();
         if (!notifications.isEmpty()) {
-            // Split the notifications into a list
             List<String> notificationList = Arrays.asList(notifications.split("\\.\\s+"));
-            model.addAttribute("notifications", notificationList); // Add the notifications list to the model
+            model.addAttribute("notifications", notificationList);
         } else {
-            // If all bills are paid and budget is within limits, add a message indicating
-            // that
             model.addAttribute("notifications",
                     Arrays.asList("All bills paid for this month", "Budget is within limits"));
         }
         return "notifications";
+    }
+
+    @GetMapping("/error")
+    public String showErrorPage() {
+        return "error";
     }
 
 }

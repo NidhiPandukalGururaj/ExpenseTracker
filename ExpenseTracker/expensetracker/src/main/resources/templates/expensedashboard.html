@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense Tracker</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Custom CSS -->
+  <style>
+    body {
+      font-family: 'Segoe Script', 'Lucida Handwriting', cursive;
+      color: black;
+      background-color: #f8f9fa;
+    }
+    .container {
+      max-width: 800px;
+    }
+    .card {
+      border: none;
+      background-color: #f8f9fa;
+    }
+    .card-title {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #343a40;
+    }
+    .card-text {
+      font-size: 1.2rem;
+    }
+    .btn {
+      background-color: #343a40;
+      color: white !important;
+      border: none;
+    }
+    .btn:hover {
+      background-color: #212529;
+    }
+  </style>
+</head>
+<body class="bg-light">
+  <div class="modal fade" id="notificationModal" tabindex="-1" role="dialog" aria-labelledby="notificationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="notificationModalLabel">Your Expense Tracker here!!</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Check your notifications here.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container py-5">
+    <h1 class="text-center mb-4">Expense Tracker</h1>
+    <div class="row">
+      <div class="col-md-16 mx-auto">
+        <div class="card-deck">
+          <div class="card border-dark">
+            <div class="card-body">
+              <h5 class="card-title text-dark">View Expenses</h5>
+              <p class="card-text text-muted">View all your expenses of this month here.</p>
+              <a href="/expenses/all" class="btn" id="viewExpensesBtn">View</a>
+            </div>
+          </div>
+          <div class="card border-dark">
+            <div class="card-body">
+              <h5 class="card-title text-dark">Add New Expense</h5>
+              <p class="card-text text-muted">Add a new expense record.</p>
+              <a href="/expenses/add" class="btn">Add</a>
+            </div>
+          </div>
+          <div class="card border-dark">
+            <div class="card-body">
+              <h5 class="card-title text-dark">Notification</h5>
+              <p class="card-text text-muted">See your notifications.</p>
+              <a href="/expenses/notifications" class="btn">See</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS and jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  
+  <!-- Custom Script -->
+  <!-- Custom Script -->
+<script>
+  $(document).ready(function() {
+    // Get userId from local storage
+    const userId = localStorage.getItem('user_id');
+    console.log('Retrieved userId:', userId); // Debugging statement
+
+    // Check if userId exists
+    if (userId) {
+      // Construct the URL with userId
+      const url = `/expenses/all/${userId}`;
+      console.log('Constructed URL:', url); // Debugging statement
+      
+      // Update the href attribute of the "View Expenses" link
+      $('#viewExpensesBtn').attr('href', url);
+      console.log('Updated href:', $('#viewExpensesBtn').attr('href')); // Debugging statement
+    } else {
+      console.log('userId not found'); // Debugging statement
+    }
+
+    // Show the notification modal
+    $('#notificationModal').modal('show');
+  });
+</script>
+
+</body>
+</html>
