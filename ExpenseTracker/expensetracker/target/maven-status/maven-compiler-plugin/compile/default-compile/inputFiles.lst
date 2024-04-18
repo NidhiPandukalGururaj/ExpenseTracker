@@ -12,11 +12,10 @@ C:\Users\Nidhi\Desktop\ExpenseTracker_Latest\ExpenseTracker\ExpenseTracker\expen
 C:\Users\Nidhi\Desktop\ExpenseTracker_Latest\ExpenseTracker\ExpenseTracker\expensetracker\src\main\java\com\example\notification\RecurrentBillObserver.java
 C:\Users\Nidhi\Desktop\ExpenseTracker_Latest\ExpenseTracker\ExpenseTracker\expensetracker\src\main\java\com\example\ExpenseManagementApplication.java
 C:\Users\Nidhi\Desktop\ExpenseTracker_Latest\ExpenseTracker\ExpenseTracker\expensetracker\src\main\java\com\example\model\Expense.java
+C:\Users\Nidhi\Desktop\ExpenseTracker_Latest\ExpenseTracker\ExpenseTracker\expensetracker\src\main\java\com\example\repository\ExpenseGroupRepository.java
 C:\Users\Nidhi\Desktop\ExpenseTracker_Latest\ExpenseTracker\ExpenseTracker\expensetracker\src\main\java\com\example\dto\IncomeSourceDTO.java
 C:\Users\Nidhi\Desktop\ExpenseTracker_Latest\ExpenseTracker\ExpenseTracker\expensetracker\src\main\java\com\example\repository\UserRepository.java
-C:\Users\Nidhi\Desktop\ExpenseTracker_Latest\ExpenseTracker\ExpenseTracker\expensetracker\src\main\java\com\example\repository\GroupRepository.java
 C:\Users\Nidhi\Desktop\ExpenseTracker_Latest\ExpenseTracker\ExpenseTracker\expensetracker\src\main\java\com\example\service\UserService.java
-C:\Users\Nidhi\Desktop\ExpenseTracker_Latest\ExpenseTracker\ExpenseTracker\expensetracker\src\main\java\com\example\service\GroupMemberService.java
 C:\Users\Nidhi\Desktop\ExpenseTracker_Latest\ExpenseTracker\ExpenseTracker\expensetracker\src\main\java\com\example\controller\UserController.java
 C:\Users\Nidhi\Desktop\ExpenseTracker_Latest\ExpenseTracker\ExpenseTracker\expensetracker\src\main\java\com\example\dto\UserLoginDto.java
 C:\Users\Nidhi\Desktop\ExpenseTracker_Latest\ExpenseTracker\ExpenseTracker\expensetracker\src\main\java\com\example\model\GroupMember.java
@@ -26,6 +25,7 @@ C:\Users\Nidhi\Desktop\ExpenseTracker_Latest\ExpenseTracker\ExpenseTracker\expen
 C:\Users\Nidhi\Desktop\ExpenseTracker_Latest\ExpenseTracker\ExpenseTracker\expensetracker\src\main\java\com\example\repository\GroupExpenseRepository.java
 C:\Users\Nidhi\Desktop\ExpenseTracker_Latest\ExpenseTracker\ExpenseTracker\expensetracker\src\main\java\com\example\model\User.java
 C:\Users\Nidhi\Desktop\ExpenseTracker_Latest\ExpenseTracker\ExpenseTracker\expensetracker\src\main\java\com\example\dto\UserRegistrationDto.java
+C:\Users\Nidhi\Desktop\ExpenseTracker_Latest\ExpenseTracker\ExpenseTracker\expensetracker\src\main\java\com\example\repository\GroupExpenseRepositoryImpl.java
 C:\Users\Nidhi\Desktop\ExpenseTracker_Latest\ExpenseTracker\ExpenseTracker\expensetracker\src\main\java\com\example\service\IncomeSourceService.java
 C:\Users\Nidhi\Desktop\ExpenseTracker_Latest\ExpenseTracker\ExpenseTracker\expensetracker\src\main\java\com\example\model\ExpenseTransactionType.java
 C:\Users\Nidhi\Desktop\ExpenseTracker_Latest\ExpenseTracker\ExpenseTracker\expensetracker\src\main\java\com\example\repository\GroupMemberRepository.java
