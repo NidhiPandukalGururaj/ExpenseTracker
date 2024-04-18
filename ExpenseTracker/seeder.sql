@@ -38,8 +38,8 @@ CREATE TABLE IF NOT EXISTS expenses (
 CREATE TABLE IF NOT EXISTS expensegroups (
     group_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     group_name VARCHAR(255) NOT NULL,
-    user_id BIGINT NOT NULL, ON DELETE CASCADE 
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    user_id BIGINT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS group_members (
@@ -82,9 +82,3 @@ INSERT INTO income_sources (user_id, source_name, annual_income) VALUES
 
 
 
-INSERT INTO income_sources (user_id, source_name, annual_income) VALUES
-(15, 'Full-time Job', 500000.00),
-(15, 'Part-time Freelance', 150000.00),
-(15, 'Rental Property', 800000.00),
-(15, 'Stock Dividends', 300000.00),
-(15, 'Online Sales', 10000.00);

@@ -5,6 +5,8 @@ import com.example.model.*;
 import com.example.repository.ExpenseRepository;
 import com.example.repository.IncomeSourceRepository;
 
+import com.example.notification.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -120,59 +122,25 @@ public class ExpenseController {
         return "redirect:/expenses/expensedashboard";
     }
 
-    @GetMapping("/notifications")
-    public String checkNotifications(Model model) {
-        StringBuilder notificationBuilder = new StringBuilder();
+    @GetMapping("/notifications/{userId}")
+    public String checkNotifications(@PathVariable Long userId, Model model) {
+        NotificationManager notificationManager = new NotificationManager();
 
-        boolean rentPaid = expenseRepository.existsByExpenseCategoryAndExpenseDateBefore(ExpenseCategory.RENT,
-                new Date());
-        if (!rentPaid) {
-            notificationBuilder.append("Rent Of This Month Not Paid Yet. ");
-        }
+        // Set RecurrentBillNotification strategy
+        notificationManager.setNotificationStrategy(new RecurrentBillNotification());
+        String recurrentBillNotification = notificationManager.generateNotification(userId, expenseRepository,
+                incomeRepository);
 
-        boolean emiPaid = expenseRepository.existsByExpenseCategoryAndExpenseDateBefore(ExpenseCategory.EMI,
-                new Date());
-        if (!emiPaid) {
-            notificationBuilder.append("EMI Of This Month Not Paid Yet. ");
-        }
+        // Set BudgetOverlimitNotification strategy
+        notificationManager.setNotificationStrategy(new BudgetOverlimitNotification());
+        String budgetOverlimitNotification = notificationManager.generateNotification(userId, expenseRepository,
+                incomeRepository);
 
-        boolean utilityPaid = expenseRepository.existsByExpenseCategoryAndExpenseDateBefore(ExpenseCategory.UTILITY,
-                new Date());
-        if (!utilityPaid) {
-            notificationBuilder.append("Utility Of This Month Not Paid Yet. ");
-        }
+        // Combine both notifications
+        String combinedNotification = recurrentBillNotification + " " + budgetOverlimitNotification;
+        List<String> notificationList = Arrays.asList(combinedNotification.split("\\.\\s+"));
 
-        YearMonth currentMonthYear = YearMonth.now();
-        LocalDate firstDayOfMonth = currentMonthYear.atDay(1);
-        LocalDate lastDayOfMonth = currentMonthYear.atEndOfMonth();
-
-        Date startDate = java.sql.Date.valueOf(firstDayOfMonth);
-        Date endDate = java.sql.Date.valueOf(lastDayOfMonth);
-
-        List<Expense> expenses = expenseRepository.findByExpenseDateBetween(startDate, endDate);
-
-        Double totalIncome = incomeRepository.findTotalIncomeByUserId(1L);
-        if (totalIncome != null) {
-            double monthlyBudget = totalIncome / 12;
-            double totalExpenses = expenses.stream()
-                    .mapToDouble(Expense::getExpenseAmount)
-                    .sum();
-
-            double spentPercentage = (totalExpenses / monthlyBudget) * 100;
-            if (spentPercentage >= 80) {
-                notificationBuilder.append(
-                        "Budget Overlimit: Monthly expenses are close to the threshold,review your budget. ");
-            }
-        }
-
-        String notifications = notificationBuilder.toString().trim();
-        if (!notifications.isEmpty()) {
-            List<String> notificationList = Arrays.asList(notifications.split("\\.\\s+"));
-            model.addAttribute("notifications", notificationList);
-        } else {
-            model.addAttribute("notifications",
-                    Arrays.asList("All bills paid for this month", "Budget is within limits"));
-        }
+        model.addAttribute("notifications", notificationList);
         return "notifications";
     }
 

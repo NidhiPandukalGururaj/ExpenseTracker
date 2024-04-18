@@ -80,7 +80,7 @@
             <div class="card-body">
               <h5 class="card-title text-dark">Notification</h5>
               <p class="card-text text-muted">See your notifications.</p>
-              <a href="/expenses/notifications" class="btn">See</a>
+              <a href="/expenses/notifications" class="btn" id="notificationLink">See</a>
             </div>
           </div>
         </div>
@@ -94,30 +94,34 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   
   <!-- Custom Script -->
-  <!-- Custom Script -->
-<script>
-  $(document).ready(function() {
-    // Get userId from local storage
-    const userId = localStorage.getItem('user_id');
-    console.log('Retrieved userId:', userId); // Debugging statement
+  <script>
+    $(document).ready(function() {
+      // Get userId from local storage
+      const userId = localStorage.getItem('user_id');
+      console.log('Retrieved userId:', userId); // Debugging statement
 
-    // Check if userId exists
-    if (userId) {
-      // Construct the URL with userId
-      const url = `/expenses/all/${userId}`;
-      console.log('Constructed URL:', url); // Debugging statement
-      
-      // Update the href attribute of the "View Expenses" link
-      $('#viewExpensesBtn').attr('href', url);
-      console.log('Updated href:', $('#viewExpensesBtn').attr('href')); // Debugging statement
-    } else {
-      console.log('userId not found'); // Debugging statement
-    }
+      // Check if userId exists
+      if (userId) {
+        // Construct the URLs with userId
+        const viewExpensesUrl = `/expenses/all/${userId}`;
+        const notificationUrl = `/expenses/notifications/${userId}`;
+        
+        console.log('Constructed view expenses URL:', viewExpensesUrl); // Debugging statement
+        console.log('Constructed notification URL:', notificationUrl); // Debugging statement
+        
+        // Update the href attributes of the "View Expenses" and "Notification" links
+        $('#viewExpensesBtn').attr('href', viewExpensesUrl);
+        $('#notificationLink').attr('href', notificationUrl);
+        
+        console.log('Updated view expenses href:', $('#viewExpensesBtn').attr('href')); // Debugging statement
+        console.log('Updated notification href:', $('#notificationLink').attr('href')); // Debugging statement
+      } else {
+        console.log('userId not found'); // Debugging statement
+      }
 
-    // Show the notification modal
-    $('#notificationModal').modal('show');
-  });
-</script>
-
+      // Show the notification modal
+      $('#notificationModal').modal('show');
+    });
+  </script>
 </body>
 </html>
