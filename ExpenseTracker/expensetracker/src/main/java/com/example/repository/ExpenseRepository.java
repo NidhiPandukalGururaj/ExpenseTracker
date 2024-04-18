@@ -4,6 +4,7 @@ import com.example.model.Expense;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import com.example.model.ExpenseCategory;
+import com.example.model.ExpenseGroup;
 
 import java.util.Date;
 import java.util.List;
@@ -15,4 +16,5 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
     List<Expense> findByUserIdAndExpenseDateBetween(Long userId, Date startDate, Date endDate);
 
     boolean existsByExpenseCategoryAndExpenseDateBefore(ExpenseCategory category, Date date);
+
 }

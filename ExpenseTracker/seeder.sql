@@ -44,11 +44,23 @@ CREATE TABLE IF NOT EXISTS expensegroups (
 
 CREATE TABLE IF NOT EXISTS group_members (
         member_id BIGINT AUTO_INCREMENT PRIMARY KEY,
-      group_id BIGINT,
+        group_id BIGINT,
          user_id BIGINT,
          FOREIGN KEY (group_id) REFERENCES expensegroups(group_id) ON DELETE CASCADE,
          FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
      );
+
+CREATE TABLE IF NOT EXISTS groupexpenses (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    group_id BIGINT NOT NULL,
+    user_id BIGINT NOT NULL,
+    expense_category ENUM('RENT','UTILITY','VEHICLE','GROCERY','EMI','MEDICAL','MISCELLANEOUS','TRAVEL','PERSONAL','SHOPPING','EDUCATION','FOOD') NOT NULL,
+    expense_date DATE NOT NULL,
+    expense_amount DECIMAL(10, 2) NOT NULL CHECK (expense_amount >= 0),
+    expense_transaction_type ENUM('CASH', 'CREDIT_CARD', 'DEBIT_CARD', 'ONLINE','NET_BANKING') NOT NULL,
+    FOREIGN KEY (group_id) REFERENCES expensegroups(group_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
     
 
 
