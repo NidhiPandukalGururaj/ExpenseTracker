@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Set Monthly Budget</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        label, select, input {
+            display: block;
+            width: 100%;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Set Monthly Budget</h1>
+        <form id="budgetForm" th:action="@{/budgets/set}" th:object="${budget}" method="post">
+            <input type="hidden" id="userId" name="user_id" th:value="${user_id}" />
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select id="category" name="category">
+                    <option value="RENT">Rent</option>
+                    <option value="UTILITY">Utility</option>
+                    <option value="VEHICLE">Vehicle</option>
+                    <option value="GROCERY">Grocery</option>
+                    <option value="EMI">EMI</option>
+                    <option value="MEDICAL">Medical</option>
+                    <option value="MISCELLANEOUS">Miscellaneous</option>
+                    <option value="TRAVEL">Travel</option>
+                    <option value="PERSONAL">Personal</option>
+                    <option value="SHOPPING">Shopping</option>
+                    <option value="EDUCATION">Education</option>
+                    <option value="FOOD">Food</option>
+                </select>
+                
+            </div>
+            <div class="form-group">
+                <label for="monthly_budget">Monthly Budget</label>
+                <input type="number" id="monthly_budget" name="monthly_budget" required min="0" step="0.01" />
+            </div>
+            <button type="submit">Set Budget</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const userId = localStorage.getItem('user_id');
+            if(userId) {
+                document.getElementById('userId').value = userId;
+            } else {
+                console.error('User ID not found in localStorage');
+            }
+        });
+    </script>
+</body>
+</html>
