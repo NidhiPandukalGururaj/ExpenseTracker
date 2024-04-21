@@ -1,24 +1,29 @@
 package com.example.controller;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
 import com.example.model.Budget;
 import com.example.service.BudgetService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/budgets")
 public class BudgetController {
 
-    private final BudgetService budgetService;
-
     @Autowired
-    public BudgetController(BudgetService budgetService) {
-        this.budgetService = budgetService;
+    private BudgetService budgetService;
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Budget>> getAllBudgetsByUserId(@PathVariable Long userId) {
+        List<Budget> budgets = budgetService.findAllBudgetsByUserId(userId);
+        return ResponseEntity.ok().body(budgets);
     }
 
-    @PostMapping("/set")
-    public Budget setBudget(@RequestBody Budget budget) {
-        return budgetService.setBudget(budget);
+    @PutMapping("/{budgetId}")
+    public ResponseEntity<Budget> updateBudget(@PathVariable Long budgetId, @RequestBody Budget budgetDetails) {
+        Budget updatedBudget = budgetService.updateBudget(budgetId, budgetDetails);
+        return ResponseEntity.ok().body(updatedBudget);
     }
-
 }

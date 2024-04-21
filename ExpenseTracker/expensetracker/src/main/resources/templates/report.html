@@ -124,22 +124,22 @@
     <div class="table-container" id="summary-container">
         <!-- Summary table will be populated dynamically using JavaScript -->
     </div>
-
+    
     <h1>Expenses - Details by Month</h1>
     <div class="table-container">
-        <div id="dropdown-container">
-            <!-- Dropdown menu will be populated dynamically using JavaScript -->
-        </div>
         <table id="details-container">
-            <!-- Your existing table structure -->
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Category</th>
+                    <th>Transaction Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Table body will be populated dynamically using JavaScript -->
+            </tbody>
         </table>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const userId = getUserIdFromLocalStorage();
-            fetchExpensesData(userId);
-        });
-    </script>
 </body>
 </html>

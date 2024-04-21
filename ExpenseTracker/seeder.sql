@@ -90,6 +90,17 @@ INSERT INTO income_sources (user_id, source_name, annual_income) VALUES
 (5, 'Consulting', 110000.00);
 
 
+INSERT INTO budgets (user_id, category, monthly_budget) VALUES
+(1, 'RENT', 1000.00),
+(1, 'UTILITY', 150.00),
+(1, 'VEHICLE', 200.00),
+(1, 'GROCERY', 300.00),
+(1, 'EMI', 500.00),
+(1, 'MEDICAL', 100.00),
+(1, 'MISCELLANEOUS', 75.00),
+(1, 'TRAVEL', 250.00),
+(1, 'PERSONAL', 100.00),
+(1, 'SHOPPING', 150.00),
 
 
 INSERT INTO expenses 

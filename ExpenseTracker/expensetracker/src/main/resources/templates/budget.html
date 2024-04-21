@@ -1,82 +1,141 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <title>Set Monthly Budget</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Monthly Budget</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <style>
+     
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-        }
+      font-family: 'Segoe Script', 'Lucida Handwriting', cursive; /* Use calligraphic fonts */
+      color: black; /* Set text color to black */
+      background-color: #f8f9fa; /* Set background color to light grey */
+    }
         .container {
-            width: 80%;
+            width: 90%;
             margin: 20px auto;
         }
-        form {
+        .form-section, .budget-list {
             background-color: #fff;
             padding: 20px;
             border-radius: 5px;
+            margin-bottom: 20px;
         }
-        .form-group {
-            margin-bottom: 10px;
-        }
-        label, select, input {
-            display: block;
-            width: 100%;
-        }
-        button {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
+        .budget-item {
+            padding: 10px;
+            background: white;
             border-radius: 5px;
-            cursor: pointer;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        button:hover {
-            opacity: 0.9;
+        .budget-item strong {
+            font-size: 16px;
+        }
+        .btn-edit {
+            padding: 5px 10px;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Set Monthly Budget</h1>
-        <form id="budgetForm" th:action="@{/budgets/set}" th:object="${budget}" method="post">
-            <input type="hidden" id="userId" name="user_id" th:value="${user_id}" />
-            <div class="form-group">
-                <label for="category">Category</label>
-                <select id="category" name="category">
-                    <option value="RENT">Rent</option>
-                    <option value="UTILITY">Utility</option>
-                    <option value="VEHICLE">Vehicle</option>
-                    <option value="GROCERY">Grocery</option>
-                    <option value="EMI">EMI</option>
-                    <option value="MEDICAL">Medical</option>
-                    <option value="MISCELLANEOUS">Miscellaneous</option>
-                    <option value="TRAVEL">Travel</option>
-                    <option value="PERSONAL">Personal</option>
-                    <option value="SHOPPING">Shopping</option>
-                    <option value="EDUCATION">Education</option>
-                    <option value="FOOD">Food</option>
-                </select>
-                
-            </div>
-            <div class="form-group">
-                <label for="monthly_budget">Monthly Budget</label>
-                <input type="number" id="monthly_budget" name="monthly_budget" required min="0" step="0.01" />
-            </div>
-            <button type="submit">Set Budget</button>
-        </form>
+        <h1 class="my-4 text-center">Manage Monthly Budget</h1>
+        <div class="form-section">
+            <form id="budgetForm" class="mb-3">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="category">Category</label>
+                        <select id="category" name="category" class="form-control">
+                            <option value="RENT">Rent</option>
+                            <option value="UTILITY">Utility</option>
+                            <option value="VEHICLE">Vehicle</option>
+                            <option value="GROCERY">Grocery</option>
+                            <option value="EMI">EMI</option>
+                            <option value="MEDICAL">Medical</option>
+                            <option value="MISCELLANEOUS">Miscellaneous</option>
+                            <option value="TRAVEL">Travel</option>
+                            <option value="PERSONAL">Personal</option>
+                            <option value="SHOPPING">Shopping</option>
+                            <option value="EDUCATION">Education</option>
+                            <option value="FOOD">Food</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="monthly_budget">Monthly Budget</label>
+                        <input type="number" id="monthly_budget" name="monthly_budget" required min="0" step="0.01" class="form-control">
+                    </div>
+                </div>
+                <input type="hidden" id="budgetId" name="budgetId">
+                <button type="submit" class="btn btn-primary">Save Budget</button>
+            </form>
+        </div>
+        <div class="budget-list" id="budgetList"></div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const userId = localStorage.getItem('user_id');
-            if(userId) {
-                document.getElementById('userId').value = userId;
-            } else {
-                console.error('User ID not found in localStorage');
+            if (userId) {
+                fetchBudgets(userId);
             }
+
+            const form = document.getElementById('budgetForm');
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const budgetId = document.getElementById('budgetId').value;
+                const category = document.getElementById('category').value;
+                const monthlyBudget = document.getElementById('monthly_budget').value;
+
+                const formData = {
+                    category: category,
+                    monthlyBudget: parseFloat(monthlyBudget)
+                };
+
+                const method = budgetId ? 'PUT' : 'POST';
+                const url = budgetId ? '/budgets/' + budgetId : '/budgets/set';
+
+                fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                }).then(response => response.json())
+                  .then(data => {
+                      fetchBudgets(userId);
+                      form.reset();
+                      document.getElementById('budgetId').value = '';
+                  })
+                  .catch(error => console.error('Error:', error));
+            });
         });
+
+        function fetchBudgets(userId) {
+            fetch('/budgets/user/' + userId)
+                .then(response => response.json())
+                .then(data => {
+                    const budgetList = document.getElementById('budgetList');
+                    budgetList.innerHTML = '';
+                    data.forEach(budget => {
+                        const div = document.createElement('div');
+                        div.className = 'budget-item';
+                        div.innerHTML = `<div><strong>${budget.category}</strong>: $${budget.monthlyBudget.toFixed(2)}</div>
+                                         <button class="btn btn-secondary btn-edit" onclick="editBudget('${budget.budgetId}', '${budget.category}', ${budget.monthlyBudget})">Edit</button>`;
+                        budgetList.appendChild(div);
+                    });
+                });
+        }
+
+        function editBudget(budgetId, category, monthlyBudget) {
+            document.getElementById('budgetId').value = budgetId;
+            document.getElementById('category').value = category;
+            document.getElementById('monthly_budget').value = monthlyBudget;
+        }
     </script>
 </body>
 </html>

@@ -25,7 +25,7 @@ import com.example.service.ExpenseService;
 
 
 @Controller
-@RestController
+// @RestController
 @RequestMapping("/expenses")
 @CrossOrigin
 public class ExpenseController {
@@ -157,6 +157,7 @@ public class ExpenseController {
     }
 
     @GetMapping("/user/{userId}")
+    @ResponseBody
     public ResponseEntity<List<Expense>> getExpensesByUserId(@PathVariable Long userId) {
         List<Expense> expenses = expenseService.getExpensesByUserId(userId);
         return ResponseEntity.ok(expenses);
