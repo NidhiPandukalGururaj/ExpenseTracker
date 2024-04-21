@@ -91,26 +91,26 @@ INSERT INTO income_sources (user_id, source_name, annual_income) VALUES
 
 
 INSERT INTO budgets (user_id, category, monthly_budget) VALUES
-(2, 'RENT', 1000.00),
-(2, 'UTILITY', 150.00),
-(2, 'VEHICLE', 200.00),
-(2, 'GROCERY', 300.00),
-(2, 'EMI', 500.00),
-(2, 'MEDICAL', 100.00),
-(2, 'MISCELLANEOUS', 75.00),
-(2, 'TRAVEL', 250.00),
-(2, 'PERSONAL', 100.00),
-(2, 'SHOPPING', 150.00),
+(11, 'RENT', 1000.00),
+(11, 'UTILITY', 150.00),
+(11, 'VEHICLE', 200.00),
+(11, 'GROCERY', 300.00),
+(11, 'EMI', 500.00),
+(11, 'MEDICAL', 100.00),
+(11, 'MISCELLANEOUS', 75.00),
+(11, 'TRAVEL', 250.00),
+(11, 'PERSONAL', 100.00),
+(11, 'SHOPPING', 150.00),
 
 
 INSERT INTO expenses 
     (user_id, expense_date, expense_amount, expense_category, expense_transaction_type) 
 VALUES
-    (1, '2023-04-01', 1200.00, 'RENT', 'ONLINE'),
-    (1, '2023-04-05', 300.00, 'UTILITY', 'NET_BANKING'),
-    (1, '2023-04-10', 150.00, 'GROCERY', 'DEBIT_CARD'),
-    (1, '2023-04-12', 450.00, 'VEHICLE', 'CREDIT_CARD'),
-    (1, '2023-04-1', 2000.00, 'EMI', 'ONLINE'),
+    (11, '2023-04-01', 1200.00, 'RENT', 'ONLINE'),
+    (11, '2023-04-05', 300.00, 'UTILITY', 'NET_BANKING'),
+    (11, '2023-04-10', 150.00, 'GROCERY', 'DEBIT_CARD'),
+    (11, '2023-04-12', 450.00, 'VEHICLE', 'CREDIT_CARD'),
+    (11, '2023-04-01', 2000.00, 'EMI', 'ONLINE'),
     (1, '2023-04-18', 500.00, 'MEDICAL', 'CASH'),
     (1, '2023-04-20', 700.00, 'TRAVEL', 'CREDIT_CARD'),
     (1, '2023-04-22', 250.00, 'PERSONAL', 'DEBIT_CARD'),
@@ -120,8 +120,8 @@ VALUES
 
 INSERT INTO income_sources (user_id, source_name, annual_income)
 VALUES
-    (1, 'Full-time Job', 50000.00),
-    (1, 'Part-time Job', 15000.00),
-    (1, 'Freelancing', 20000.00),
-    (1, 'Dividends', 3000.00),
-    (1, 'Rental Income', 12000.00);
+    (11, 'Full-time Job', 50000.00),
+    (11, 'Part-time Job', 15000.00),
+    (11, 'Freelancing', 20000.00),
+    (11, 'Dividends', 3000.00),
+    (11, 'Rental Income', 12000.00);

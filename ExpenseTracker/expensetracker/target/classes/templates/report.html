@@ -20,7 +20,7 @@
             border-collapse: collapse;
         }
         th, td {
-            border: 1px solid #333; /* Defined a stronger border color */
+            border: 1px solid #333;
             text-align: left;
             padding: 8px;
         }
@@ -43,9 +43,13 @@
                 .then(response => response.json())
                 .then(data => {
                     const groupedExpenses = groupExpensesByMonth(data);
-                    const currentMonth = new Date().toISOString().slice(0, 7);
-                    updateSummaryTable(groupedExpenses[currentMonth] || []);
-                    updateTable(groupedExpenses);
+                    document.getElementById('generate-report').addEventListener('click', function() {
+                        const inputMonth = document.getElementById('month-input').value;
+                        if (inputMonth) {
+                            const expensesForMonth = groupedExpenses[inputMonth] || [];
+                            updateTableForMonth(expensesForMonth, inputMonth);
+                        }
+                    });
                 })
                 .catch(error => console.error('Error fetching expenses:', error));
         }
@@ -62,55 +66,39 @@
             return groupedExpenses;
         }
 
-        function updateSummaryTable(expensesInMonth) {
-            // ... Same as the provided summary table function ...
-        }
-        function populateDropdown(groupedExpenses) {
-            const dropdown = document.createElement('select');
-            dropdown.addEventListener('change', function() {
-                const selectedMonth = this.value;
-                updateSummaryTable(groupedExpenses[selectedMonth] || []);
-            });
-
-            Object.keys(groupedExpenses).forEach(month => {
-                const option = document.createElement('option');
-                option.value = month;
-                option.textContent = month;
-                dropdown.appendChild(option);
-            });
-
-            const dropdownContainer = document.getElementById('dropdown-container');
-            dropdownContainer.innerHTML = ''; // Clear previous content
-            dropdownContainer.appendChild(dropdown);
-        }
-        function updateTable(groupedExpenses) {
+        function updateTableForMonth(expensesInMonth, month) {
             const tbody = document.querySelector('#details-container tbody');
             tbody.innerHTML = '';
 
-            Object.keys(groupedExpenses).forEach(month => {
-                const expensesInMonth = groupedExpenses[month];
-                const monthRow = document.createElement('tr');
-                monthRow.innerHTML = `<td colspan="4">${month}</td>`;
-                tbody.appendChild(monthRow);
+            const categoryTotals = {}; // Dictionary to store category totals for the month
 
-                expensesInMonth.forEach(expense => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${formatDate(expense.expenseDate)}</td>
-                        <td>${expense.expenseAmount}</td>
-                        <td>${expense.expenseCategory}</td>
-                        <td>${expense.expenseTransactionType}</td>
-                    `;
-                    tbody.appendChild(row);
-                });
+            expensesInMonth.forEach(expense => {
+                const category = expense.expenseCategory;
+                const amount = expense.expenseAmount;
+
+                // If category already exists, add the amount, otherwise initialize it
+                if (categoryTotals[category]) {
+                    categoryTotals[category] += amount;
+                } else {
+                    categoryTotals[category] = amount;
+                }
             });
-        }
 
-        function formatDate(dateString) {
-            // Parse the date string and format it as MM/DD/YYYY
-            const date = new Date(dateString);
-            const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-            return date.toLocaleDateString('en-US', options);
+            // Add a header row for the month
+            const monthRow = document.createElement('tr');
+            monthRow.className = 'month-summary';
+            monthRow.innerHTML = `<td colspan="4">Month: ${month}</td>`;
+            tbody.appendChild(monthRow);
+
+            // Add the category totals to the table
+            Object.keys(categoryTotals).forEach(category => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td colspan="2">${category}</td>
+                    <td colspan="2">${categoryTotals[category]}</td>
+                `;
+                tbody.appendChild(row);
+            });
         }
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -120,20 +108,21 @@
     </script>
 </head>
 <body>
-    <h1>Expenses - Current Month Summary</h1>
-    <div class="table-container" id="summary-container">
-        <!-- Summary table will be populated dynamically using JavaScript -->
-    </div>
-    
-    <h1>Expenses - Details by Month</h1>
+    <h1>Expenses - Summary by Category and Month</h1>
     <div class="table-container">
+        <!-- Input for month and button to generate report -->
+        <div>
+            <label for="month-input">Enter month (YYYY-MM):</label>
+            <input type="text" id="month-input" placeholder="YYYY-MM">
+            <button id="generate-report">Generate Report</button>
+        </div>
+
+        <!-- Table for displaying details by category -->
         <table id="details-container">
             <thead>
                 <tr>
-                    <th>Date</th>
-                    <th>Amount</th>
-                    <th>Category</th>
-                    <th>Transaction Type</th>
+                    <th colspan="2">Category</th>
+                    <th colspan="2">Total Amount</th>
                 </tr>
             </thead>
             <tbody>

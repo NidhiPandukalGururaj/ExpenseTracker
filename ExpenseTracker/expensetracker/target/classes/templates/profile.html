@@ -3,24 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>User Profile</title>
-    
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var userId = localStorage.getItem("user_id");
-            if (userId) {
-                fetch(`/api/users/details/${userId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        document.querySelector('input[name="userName"]').value = data.userName;
-                        document.querySelector('input[name="firstName"]').value = data.firstName;
-                        document.querySelector('input[name="lastName"]').value = data.lastName;
-                        document.querySelector('input[name="email"]').value = data.email;
-                        document.querySelector('input[name="gender"]').value = data.gender;
-                    })
-                    .catch(error => console.error('Error fetching user details:', error));
-            }
-        });
-    </script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 
     <style>
         body {
@@ -31,10 +15,11 @@
         }
         .profile-container {
             max-width: 400px;
-            margin: 0 auto;
+            margin: 20px auto;
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         .icon-placeholder {
             width: 100px;
@@ -43,17 +28,13 @@
             border-radius: 50%;
             display: block;
             margin: 10px auto;
-        }
-        .user-info {
-            text-align: center;
+            background-image: url('https://www.gravatar.com/avatar/?d=mp');
+            background-size: cover;
         }
         .user-info h1 {
             font-size: 24px;
-            margin-bottom: 10px;
-        }
-        .user-info p {
-            color: #666;
-            font-size: 14px;
+            margin: 10px 0;
+            text-align: center;
         }
         .details-list {
             list-style: none;
@@ -65,54 +46,67 @@
         .details-list label {
             font-weight: bold;
             display: block;
+            color: #333;
         }
-        .details-list input {
-            width: 100%;
+        .details-item {
             padding: 8px;
-            margin-top: 5px;
+            background: #f8f9fa;
             border-radius: 4px;
-            border: 1px solid #ddd;
-            box-sizing: border-box;
-            display: block;
+        }
+        .details-icon {
+            margin-right: 10px;
+            color: #666;
         }
     </style>
 </head>
 <body>
-
 <div class="profile-container">
     <div class="icon-placeholder"></div>
     <div class="user-info">  
-       <h1>       
-       </h1>
+        <h1></h1>
     </div>
     <ul class="details-list">
         <li>
-            <label for="userName">Username:</label>
-            <input type="text" name="userName" id="userName" value="janedoe" readonly>
+            <label><i class="fas fa-user details-icon"></i>Username</label>
+            <div class="details-item" id="userName">janedoe</div>
         </li>
         <li>
-            <label for="email">Email:</label>
-            <input type="email" name="email" id="email" value="jane.doe@example.com" readonly>
+            <label><i class="fas fa-envelope details-icon"></i>Email</label>
+            <div class="details-item" id="email">jane.doe@example.com</div>
         </li>
         <li>
-            <label for="firstName">First Name:</label>
-            <input type="text" name="firstName" id="firstName" value="Jane" readonly>
+            <label><i class="fas fa-user details-icon"></i>First Name</label>
+            <div class="details-item" id="firstName">Jane</div>
         </li>
         <li>
-            <label for="lastName">Last Name:</label>
-            <input type="text" name="lastName" id="lastName" value="Doe" readonly>
+            <label><i class="fas fa-user details-icon"></i>Last Name</label>
+            <div class="details-item" id="lastName">Doe</div>
         </li>
         <li>
-            <label for="gender">Gender:</label>
-            <input type="text" name="gender" id="gender" value="Female" readonly>
+            <label><i class="fas fa-venus-mars details-icon"></i>Gender</label>
+            <div class="details-item" id="gender">Female</div>
         </li>
     </ul>
-    <button onclick="enableEditing()">Edit Details</button>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
-    function enableEditing() {
-        document.querySelectorAll('input').forEach(input => input.removeAttribute('readonly'));
-    }
+    document.addEventListener('DOMContentLoaded', function () {
+        var userId = localStorage.getItem("user_id");
+        if (userId) {
+            fetch(`/api/users/details/${userId}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('userName').textContent = data.userName;
+                    document.getElementById('firstName').textContent = data.firstName;
+                    document.getElementById('lastName').textContent = data.lastName;
+                    document.getElementById('email').textContent = data.email;
+                    document.getElementById('gender').textContent = data.gender;
+                    document.querySelector('.user-info h1').textContent = data.firstName + " " + data.lastName;
+                })
+                .catch(error => console.error('Error fetching user details:', error));
+        }
+    });
 </script>
 </body>
 </html>

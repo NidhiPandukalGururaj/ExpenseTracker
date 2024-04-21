@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Monthly Expenses</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #333;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .month-summary {
+            font-weight: bold;
+            background-color: #e7e7e7;
+        }
+        .chart-container {
+            margin: 20px 0;
+            height: 400px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Function to retrieve user ID from local storage
+        function getUserId() {
+            return localStorage.getItem('user_id');
+        }
+
+        // Function to fetch expenses data for a given user
+        function fetchExpensesData(userId) {
+            return fetch(`http://localhost:8080/expenses/user/${userId}`)
+                .then((response) => response.json())
+                .catch((error) => console.error('Error fetching expenses:', error));
+        }
+
+        // Function to group expenses by month
+        function groupExpensesByMonth(expenses) {
+            const groupedExpenses = {};
+            expenses.forEach((expense) => {
+                const month = expense.expenseDate.slice(0, 7);
+                if (!groupedExpenses[month]) {
+                    groupedExpenses[month] = [];
+                }
+                groupedExpenses[month].push(expense);
+            });
+            return groupedExpenses;
+        }
+
+        // Global variable to hold the current chart instance
+        let currentChart = null;
+
+        // Function to update the table with expenses for a specific month
+        function updateTableForMonth(expensesInMonth, month) {
+            const tbody = document.querySelector('#expense-table tbody');
+            tbody.innerHTML = ''; // Clear existing content
+
+            const categoryTotals = {}; // Store total expenses by category
+
+            expensesInMonth.forEach((expense) => {
+                const category = expense.expenseCategory;
+                const amount = expense.expenseAmount;
+
+                if (categoryTotals[category]) {
+                    categoryTotals[category] += amount;
+                } else {
+                    categoryTotals[category] = amount;
+                }
+            });
+
+            const monthRow = document.createElement('tr');
+            monthRow.className = 'month-summary';
+            monthRow.innerHTML = `<td colspan="4">Month: ${month}</td>`;
+            tbody.appendChild(monthRow);
+
+            // Add category totals to the table
+            Object.keys(categoryTotals).forEach((category) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td colspan="2">${category}</td>
+                    <td colspan="2">${categoryTotals[category]}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Function to draw a chart for a given month and chart type
+        function drawCategoryChart(expensesInMonth, month, chartType) {
+            const categoryTotals = {}; // Store total expenses by category
+
+            expensesInMonth.forEach((expense) => {
+                const category = expense.expenseCategory;
+                const amount = expense.expenseAmount;
+
+                if (categoryTotals[category]) {
+                    categoryTotals[category] += amount;
+                } else {
+                    categoryTotals[category] = amount;
+                }
+            });
+
+            // Get the canvas context for the chart
+            const ctx = document.getElementById('category-chart').getContext('2d');
+
+            // If there's an existing chart, destroy it before creating a new one
+            if (currentChart) {
+                currentChart.destroy();
+            }
+
+            // Create a new chart with the given chart type
+            currentChart = new Chart(ctx, {
+                type: chartType, // Bar or pie depending on user choice
+                data: {
+                    labels: Object.keys(categoryTotals),
+                    datasets: [{
+                        label: `Total Expenses for ${month}`,
+                        data: Object.values(categoryTotals),
+                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'],
+                        borderColor: '#333',
+                        borderWidth: 1,
+                    }],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                        },
+                        y: {
+                            beginAtZero: true,
+                        },
+                    },
+                    plugins: {
+                        legend: {
+                            display: chartType === 'pie', // Show legend only for pie charts
+                        },
+                    },
+                },
+            });
+        }
+
+        // Set up the event listener for the 'Visualize' button
+        document.addEventListener('DOMContentLoaded', function() {
+            const userId = getUserId();
+            fetchExpensesData(userId).then((data) => {
+                const groupedExpenses = groupExpensesByMonth(data);
+
+                document.getElementById('generate-report').addEventListener('click', function() {
+                    const monthInput = document.getElementById('month-input').value;
+                    const chartType = document.getElementById('chart-type').value;
+                    if (monthInput) {
+                        const expensesForMonth = groupedExpenses[monthInput] || [];
+                        updateTableForMonth(expensesForMonth, monthInput);
+                        drawCategoryChart(expensesForMonth, monthInput, chartType); // Create the new chart
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Visualizing Monthly Expenses</h1>
+    <div class="container">
+        <div>
+            <label for="month-input">Enter month (YYYY-MM):</label>
+            <input type="text" id="month-input" placeholder="YYYY-MM">
+            <button id="generate-report">Visualize</button>
+            <br>
+            <label for="chart-type">Select Chart Type:</label>
+            <select id="chart-type">
+                <option value="bar">Bar Chart</option>
+                <option value="pie">Pie Chart</option>
+            </select>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="category-chart"></canvas>
+        </div>
+
+        <table id="expense-table">
+            <thead>
+                <tr>
+                    <th colspan="2">Category</th>
+                    <th colspan="2">Total Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Content will be populated dynamically -->
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
