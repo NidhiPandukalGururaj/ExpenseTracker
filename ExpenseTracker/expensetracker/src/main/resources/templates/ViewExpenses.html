@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group Expenses</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Group Expenses</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Expense Category</th>
+                    <th>Expense Date</th>
+                    <th>Expense Amount</th>
+                    <th>Transaction Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Iterate over the expenses and display each expense -->
+                <tr th:each="expense : ${expenses}">
+                    <td th:text="${expense.expenseCategory}"></td>
+                    <td th:text="${#dates.format(expense.expenseDate, 'dd-MM-yyyy')}"></td>
+                    <td th:text="${expense.expenseAmount}"></td>
+                    <td th:text="${expense.expenseTransactionType}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

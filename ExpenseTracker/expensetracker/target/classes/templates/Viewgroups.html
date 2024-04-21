@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Groups</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+<div class="container py-5">
+    <h2>My Groups</h2>
+    <div th:if="${groups.isEmpty()}">
+        <p>You are not part of any groups.</p>
+    </div>
+    <div th:each="group : ${groups}" class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title" th:text="${group.groupName}"></h5>
+            <div class="btn-group">
+                <!-- Add Expense button -->
+                <a th:href="@{/groups/{groupId}/expenses/add(groupId=${group.groupId})}" class="btn btn-primary">Add Expense</a>
+                <!-- Quit Group button -->
+                <a th:href="@{/groups/{groupId}/quit(groupId=${group.groupId})}" class="btn btn-danger">Quit Group</a>
+                <!-- View Members button -->
+                <a th:href="@{/groups/{groupId}/members(groupId=${group.groupId})}" class="btn btn-secondary">View Members</a>
+                <!-- View Expenses button -->
+                <a th:href="@{/groups/{groupId}/expenses(groupId=${group.groupId})}" class="btn btn-secondary">View Expenses</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Bootstrap JS and jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<!-- Custom Script -->
+<script>
+    $(document).ready(function() {
+        // Get userId from local storage
+        const userId = localStorage.getItem('user_id');
+
+        // Check if userId exists
+        if (userId) {
+            // Add click event listeners to the "Add Expense" button
+            $('.btn-primary').click(function() {
+                const groupId = $(this).attr('href').match(/\d+/)[0]; // Extract groupId from href
+                const addExpenseUrl = "/groups/" + parseInt(groupId) + "/expenses/add";
+                window.location.href = addExpenseUrl;
+                return false; // Prevent default link behavior
+            });
+        } else {
+            console.log('userId not found'); // Debugging statement
+        }
+    });
+</script>
+</body>
+</html>

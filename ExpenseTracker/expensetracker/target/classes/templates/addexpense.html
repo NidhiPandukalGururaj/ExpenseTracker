@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Expense</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            padding: 20px;
+            background-color: #f8f9fa; /* Light grey background */
+            color: #333; /* Dark grey text color */
+            text-align: center; /* Center-align content */
+        }
+        h2 {
+            color: #555; /* Dark grey heading color */
+            margin-bottom: 20px;
+        }
+        form {
+            background-color: #fff; /* White background for form */
+            padding: 20px;
+            border-radius: 5px; /* Rounded corners */
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1); /* Shadow effect */
+            text-align: left; /* Left-align form content */
+        }
+        label {
+            font-weight: bold; /* Bold label text */
+        }
+        input[type="submit"] {
+            background-color: #333; /* Black submit button background */
+            color: #fff; /* White submit button text color */
+            border: none; /* No border */
+            padding: 10px 20px; /* Padding */
+            border-radius: 5px; /* Rounded corners */
+            cursor: pointer; /* Cursor style */
+        }
+        input[type="submit"]:hover {
+            background-color: #555; /* Darker black on hover */
+        }
+    </style>
+    <script th:inline="javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            var userId = localStorage.getItem("user_id");
+            if (userId && userId !== "null" && userId !== "undefined") {
+                document.getElementById("userId").value = userId;
+                console.log("User ID : ",userId);
+            } else {
+                alert("User ID is missing or invalid. Please login again.");
+                window.location.href = "/login"; // Redirect to login page if userId is missing
+            }
+        });
+    </script>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/expenses/expensedashboard">Expense Tracker</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/expenses/expensedashboard">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <!-- Add more navigation links here -->
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h2>Add Expense</h2>
+        <form th:action="@{'/groups/' + ${groupId} + '/add-expense'}" method="post">
+            <!-- Hidden input field for group ID -->
+            <input type="hidden" id="groupId" name="groupId" th:value="${groupId}">
+            <!-- Hidden input field for user ID from local storage -->
+            <input type="hidden" id="userId" name="userId" th:value="${userId}" />
+            <div class="form-group">
+                <label for="expenseCategory">Expense Category:</label>
+                <select class="form-control" id="expenseCategory" name="expenseCategory" required>
+                    <!-- options -->
+                    <option value="RENT">Rent</option>
+                    <option value="UTILITY">Utility</option>
+                    <option value="VEHICLE">Vehicle</option>
+                    <option value="GROCERY">Grocery</option>
+                    <option value="EMI">EMI</option>
+                    <option value="MEDICAL">Medical</option>
+                    <option value="MISCELLANEOUS">Miscellaneous</option>
+                    <option value="TRAVEL">Travel</option>
+                    <option value="PERSONAL">Personal</option>
+                    <option value="SHOPPING">Shopping</option>
+                    <option value="EDUCATION">Education</option>
+                    <option value="FOOD">Food</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="expenseDate">Expense Date:</label>
+                <input type="date" class="form-control" id="expenseDate" name="expenseDate" required>
+            </div>
+            <div class="form-group">
+                <label for="expenseAmount">Expense Amount:</label>
+                <input type="number" class="form-control" id="expenseAmount" name="expenseAmount" step="0.01" required>
+            </div>
+            <div class="form-group">
+                <label for="expenseTransactionType">Transaction Type:</label>
+                <select class="form-control" id="expenseTransactionType" name="expenseTransactionType" required>
+                    <!-- options -->
+                    <option value="CASH">Cash</option>
+                    <option value="CREDIT_CARD">Credit Card</option>
+                    <option value="DEBIT_CARD">Debit Card</option>
+                    <option value="NET_BANKING">Net Banking</option>
+                    <option value="ONLINE">Online</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Expense</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    <!-- Custom Script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Get group ID from the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const groupId = urlParams.get('groupId');
+            // Set group ID to the hidden input field
+            document.getElementById('groupId').value = groupId;
+
+            // Get user ID from local storage
+            const userId = localStorage.getItem('user_id');
+            // Set user ID to the hidden input field
+            document.getElementById('userId').value = userId;
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Head content here -->
+</head>
+<body>
+    <div class="container">
+        <h2>Group Members</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Member Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Iterate over the members and display their names -->
+                <tr th:each="member : ${members}">
+                    <td th:text="${member.user.name}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

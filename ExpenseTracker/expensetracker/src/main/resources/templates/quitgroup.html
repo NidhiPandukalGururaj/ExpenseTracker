@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quit Group</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: 'Segoe Script', 'Lucida Handwriting', cursive; /* Use calligraphic fonts */
+            color: black; /* Set text color to black */
+            background-color: #f8f9fa; /* Set background color to light grey */
+        }
+        .container {
+            max-width: 800px; /* Limit container width */
+            margin-top: 50px; /* Add top margin */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Quit Group</h2>
+        <p>Are you sure you want to quit this group?</p>
+        <form id="quitForm" method="post">
+            <input type="hidden" name="userId" th:value="${userId}" />
+            <button type="submit" class="btn btn-danger">Quit Group</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Custom Script -->
+    <script>
+        $(document).ready(function() {
+            const urlParams = window.location.pathname.split('/');
+            const groupId = urlParams[2]; // Extract groupId from the URL path
+            const userId = localStorage.getItem('user_id');
+            console.log(userId, groupId);
+            
+            if (groupId && userId) {
+                const form = document.getElementById('quitForm');
+                form.action = `/groups/${groupId}/quit`;
+                form.querySelector('[name="userId"]').value = userId;
+            } else {
+                console.log('groupId or userId not found');
+            }
+        });
+    </script>
+    
+    
+</body>
+</html>
