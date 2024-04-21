@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Group Members</title>
+    <title>Add Members</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom CSS -->
@@ -82,25 +82,34 @@
         </div>
     </nav>
     <div class="container py-5">
-        <h2>Group Members</h2><br>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Member Name</th><br>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Iterate over the members and display their names -->
-                <tr th:each="member : ${members}">
-                    <td th:text="${member.firstName + ' ' + member.lastName}"></td> 
-                </tr>
-            </tbody>
-        </table>
+        <h2>Add Members</h2>
+        <form id="addMembersForm" method="post">
+            <input type="hidden" id="groupId" name="groupId">
+            <div class="form-group">
+                <label for="memberIds">Member IDs (comma-separated):</label>
+                <input type="text" class="form-control" id="memberIds" name="memberIds" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Members</button>
+        </form>
     </div>
-    
+
     <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Extract groupId from the URL
+            const path = window.location.pathname;
+            const groupId = path.split('/')[2]; // Assuming the URL format is like "/groups/{groupId}/add-members"
+            
+            // Set the groupId value to the hidden input
+            document.getElementById('groupId').value = groupId;
+            
+            // Set the action attribute of the form
+            const form = document.getElementById('addMembersForm');
+            form.action = `/groups/${groupId}/add-members`;
+        });
+    </script>
 </body>
 </html>

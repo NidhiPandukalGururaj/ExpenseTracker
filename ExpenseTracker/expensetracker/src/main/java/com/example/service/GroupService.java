@@ -29,6 +29,11 @@ public class GroupService {
     @Autowired
     private UserRepository userRepository;
 
+    @Transactional(readOnly = true)
+    public List<ExpenseGroup> getAllGroups() {
+        return expenseGroupRepository.findAll();
+    }
+
     @Transactional
     public void addMemberToGroup(Long groupId, Long userId) {
         ExpenseGroup group = expenseGroupRepository.findById(groupId)
@@ -56,6 +61,34 @@ public class GroupService {
     @Transactional(readOnly = true)
     public List<User> getGroupMembers(Long groupId) {
         return groupMemberRepository.findAllByExpenseGroup_GroupId(groupId);
+    }
+
+    @Transactional
+    public void addMembersToGroup(Long groupId, List<Long> memberIds) {
+        ExpenseGroup group = expenseGroupRepository.findById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("Group not found with ID: " + groupId));
+
+        List<User> members = userRepository.findAllById(memberIds);
+
+        for (User member : members) {
+            GroupMember groupMember = new GroupMember();
+            groupMember.setExpenseGroup(group);
+            groupMember.setUser(member);
+            groupMemberRepository.save(groupMember);
+        }
+        System.out.println(groupId);
+    }
+
+    @Transactional
+    public void addUserToGroup(Long groupId, Long userId) {
+        ExpenseGroup group = expenseGroupRepository.findById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("Group not found with ID: " + groupId));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
+        GroupMember member = new GroupMember();
+        member.setExpenseGroup(group);
+        member.setUser(user);
+        groupMemberRepository.save(member);
     }
 
     @Transactional(readOnly = true)
