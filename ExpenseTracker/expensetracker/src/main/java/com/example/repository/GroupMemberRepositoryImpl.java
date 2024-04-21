@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 import java.util.List;
 
 @Repository
@@ -14,6 +15,15 @@ public class GroupMemberRepositoryImpl {
 
     @Autowired
     private EntityManager entityManager;
+
+    @Transactional
+    public void deleteByExpenseGroup_GroupIdAndUserId(Long groupId, Long userId) {
+        entityManager.createQuery(
+                "DELETE FROM GroupMember gm WHERE gm.expenseGroup.groupId = :groupId AND gm.user.userId = :userId")
+                .setParameter("groupId", groupId)
+                .setParameter("userId", userId)
+                .executeUpdate();
+    }
 
     public List<User> findAllByExpenseGroup_GroupId(Long groupId) {
         TypedQuery<User> query = entityManager.createQuery(

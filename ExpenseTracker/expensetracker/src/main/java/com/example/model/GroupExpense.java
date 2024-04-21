@@ -4,6 +4,7 @@ package com.example.model;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "groupexpenses")
@@ -27,6 +28,7 @@ public class GroupExpense {
     private ExpenseCategory expenseCategory;
 
     @Column(name = "expense_date", nullable = false)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date expenseDate;
 
     @Column(name = "expense_amount", nullable = false, precision = 10, scale = 2)

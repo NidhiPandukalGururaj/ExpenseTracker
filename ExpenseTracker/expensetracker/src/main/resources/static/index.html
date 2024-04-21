@@ -53,7 +53,6 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#" id="incomeSourcesLink">Income Sources</a>
-
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/setbudget">Budget Overview</a>
@@ -85,30 +84,44 @@
       </div>
     </div>
   </div>
+
   <div class="container py-5">
     <div class="row">
-      <div class="col-md-16 mx-auto"> <!-- Adjusted column size to fit content -->
-        <div class="card-deck">
-          <div class="card border-dark">
-            <div class="card-body">
-              <h5 class="card-title text-dark">View Expenses</h5>
-              <p class="card-text text-muted">View all your expenses of this month.</p>
-              <a href="/expenses/all" class="btn">View</a>
-            </div>
+      <div class="col-md-6"> <!-- Adjusted column size to fit content -->
+        <div class="card border-dark">
+          <div class="card-body">
+            <h5 class="card-title text-dark">View Expenses</h5>
+            <p class="card-text text-muted">View all your expenses of this month.</p>
+            <a href="/expenses/all" class="btn">View</a>
           </div>
-          <div class="card border-dark">
-            <div class="card-body">
-              <h5 class="card-title text-dark">Add New Expense</h5>
-              <p class="card-text text-muted">Add a new expense record.</p>
-              <a href="/expenses/add" class="btn">Add</a>
-            </div>
+        </div>
+      </div>
+      <div class="col-md-6"> <!-- Adjusted column size to fit content -->
+        <div class="card border-dark">
+          <div class="card-body">
+            <h5 class="card-title text-dark">Add New Expense</h5>
+            <p class="card-text text-muted">Add a new expense record.</p>
+            <a href="/expenses/add" class="btn">Add</a>
           </div>
-          <div class="card border-dark">
-            <div class="card-body">
-              <h5 class="card-title text-dark">Notification</h5>
-              <p class="card-text text-muted">See your notifications.</p>
-              <a href="/expenses/notifications" class="btn">See</a>
-            </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-3"> <!-- Add margin top to create space between rows -->
+      <div class="col-md-6"> <!-- Adjusted column size to fit content -->
+        <div class="card border-dark">
+          <div class="card-body">
+            <h5 class="card-title text-dark">Notification</h5>
+            <p class="card-text text-muted">See your notifications.</p>
+            <a href="/expenses/notifications" class="btn">See</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6"> <!-- Adjusted column size to fit content -->
+        <div class="card border-dark">
+          <div class="card-body">
+            <h5 class="card-title text-dark">Group Management</h5>
+            <p class="card-text text-muted">Manage your groups here.</p>
+            <a href="/groups/" class="btn">Manage</a>
           </div>
         </div>
       </div>
@@ -125,7 +138,7 @@
       }
       var userId = localStorage.getItem('user_id');
       if (userId) {
-          $('#incomeSourcesLink').attr('href', '/income-sources/user/' + userId);
+        $('#incomeSourcesLink').attr('href', '/income-sources/user/' + userId);
       } else {
           window.location.href = '/register';
       }

@@ -9,34 +9,58 @@
     <!-- Custom CSS -->
     <style>
         body {
-            padding: 20px;
-            background-color: #f8f9fa; /* Light grey background */
-            color: #333; /* Dark grey text color */
-            text-align: center; /* Center-align content */
+            font-family: 'Segoe Script', 'Lucida Handwriting', cursive;
+            color: black;
+            background-color: #f8f9fa;
         }
-        h1 {
-            color: #555; /* Dark grey heading color */
-            margin-bottom: 20px;
+        .container {
+            max-width: 800px;
+        }
+        .card {
+            border: none;
+            background-color: #f8f9fa;
+        }
+        .card-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #343a40;
+        }
+        .card-text {
+            font-size: 1.2rem;
+        }
+        .btn {
+            background-color: #343a40;
+            color: white !important;
+            border: none;
+        }
+        .btn:hover {
+            background-color: #212529;
         }
         .expense-block {
-            background-color: #fff; /* White background for each block */
-            border-radius: 5px; /* Rounded corners */
-            margin-bottom: 20px; /* Spacing between blocks */
+            background-color: #fff;
+            border-radius: 5px;
+            margin-bottom: 20px;
         }
         .expense-details {
             padding: 20px;
-            text-align: left; /* Left-align content within each block */
+            text-align: left;
         }
-        .btn {
-            background-color: #333; /* Black button background */
-            color: #fff; /* White button text color */
+        .notification-column {
+            background-color: #f8d7da;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 20px;
         }
-        .btn:hover {
-            background-color: #555; /* Darker black on hover */
+        .notification {
+            background-color: #dc3545;
+            color: #fff;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
-<body>
+<body class="bg-light">
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="/">Expense Tracker</a>
@@ -49,24 +73,24 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
                 </li>
-                <!-- Add more navigation links here -->
             </ul>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <div class="container">
+    <div class="container py-5">
         <h1 class="mt-5">All Expenses Of This Month</h1>
         <div class="row">
             <!-- Loop through expenses and display them in blocks -->
             <div th:each="expense : ${expenses}" class="col-md-6">
-                <div class="expense-block">
-                    <div class="expense-details">
-                        <p><strong>Date:</strong> <span th:text="${#dates.format(expense.expenseDate, 'yyyy-MM-dd')}"></span></p>
-                        <p><strong>Amount:</strong> <span th:text="${expense.expenseAmount}"></span></p>
-                        <p><strong>Category:</strong> <span th:text="${expense.expenseCategory}"></span></p>
-                        <p><strong>Transaction Type:</strong> <span th:text="${expense.expenseTransactionType}"></span></p>
-                        <p><strong>Receipt:</strong> <a th:href="@{/receipts/{id}(id=${expense.id})}" class="btn btn-sm">View Receipt</a></p>
+                <div class="card border-dark">
+                    <div class="card-body">
+                        <h5 class="card-title">Expense Details</h5>
+                        <p class="card-text"><strong>Date:</strong> <span th:text="${#dates.format(expense.expenseDate, 'yyyy-MM-dd')}"></span></p>
+                        <p class="card-text"><strong>Amount:</strong> <span th:text="${expense.expenseAmount}"></span></p>
+                        <p class="card-text"><strong>Category:</strong> <span th:text="${expense.expenseCategory}"></span></p>
+                        <p class="card-text"><strong>Transaction Type:</strong> <span th:text="${expense.expenseTransactionType}"></span></p>
+                        <p class="card-text"><strong>Receipt:</strong> <a th:href="@{/receipts/{id}(id=${expense.id})}" class="btn btn-sm">View Receipt</a></p>
                         <div>
                             <a th:href="@{/expenses/edit/{id}(id=${expense.id})}" class="btn btn-sm btn-secondary">Edit</a>
                             <a th:href="@{/expenses/delete/{id}(id=${expense.id})}" class="btn btn-sm btn-secondary">Delete</a>
@@ -75,10 +99,10 @@
                     </div>
                 </div>
             </div>
+            <!-- Notification Column -->
         </div>
     </div>
-           
-
+    
     <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Expense</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: 'Segoe Script', 'Lucida Handwriting', cursive;
+            color: black;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 800px;
+        }
+        .card {
+            border: none;
+            background-color: #f8f9fa;
+        }
+        .card-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #343a40;
+        }
+        .card-text {
+            font-size: 1.2rem;
+        }
+        .btn {
+            background-color: #343a40;
+            color: white !important;
+            border: none;
+        }
+        .btn:hover {
+            background-color: #212529;
+        }
+        h2 {
+            color: #555;
+            margin-bottom: 20px;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+            text-align: left;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="submit"] {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #555;
+        }
+    </style>
+    <script th:inline="javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            var userId = localStorage.getItem("user_id");
+            if (userId && userId !== "null" && userId !== "undefined") {
+                document.getElementById("userId").value = userId;
+                console.log("User ID : ",userId);
+            } else {
+                alert("User ID is missing or invalid. Please login again.");
+                window.location.href = "/login";
+            }
+        });
+    </script>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/expenses/expensedashboard">Expense Tracker</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/groups/">Group Management <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/expenses/expensedashboard">Personal Expenses<span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h2>Add Expense</h2>
+        <form th:action="@{'/groups/' + ${groupId} + '/add-expense'}" method="post">
+            <input type="hidden" id="groupId" name="groupId" th:value="${groupId}">
+            <input type="hidden" id="userId" name="userId" th:value="${userId}" />
+            <div class="form-group">
+                <label for="expenseCategory">Expense Category:</label>
+                <select class="form-control" id="expenseCategory" name="expenseCategory" required>
+                    <option value="RENT">Rent</option>
+                    <option value="UTILITY">Utility</option>
+                    <option value="VEHICLE">Vehicle</option>
+                    <option value="GROCERY">Grocery</option>
+                    <option value="EMI">EMI</option>
+                    <option value="MEDICAL">Medical</option>
+                    <option value="MISCELLANEOUS">Miscellaneous</option>
+                    <option value="TRAVEL">Travel</option>
+                    <option value="PERSONAL">Personal</option>
+                    <option value="SHOPPING">Shopping</option>
+                    <option value="EDUCATION">Education</option>
+                    <option value="FOOD">Food</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="expenseDate">Expense Date:</label>
+                <input type="date" class="form-control" id="expenseDate" name="expenseDate" required>
+            </div>
+            <div class="form-group">
+                <label for="expenseAmount">Expense Amount:</label>
+                <input type="number" class="form-control" id="expenseAmount" name="expenseAmount" step="0.01" required>
+            </div>
+            <div class="form-group">
+                <label for="expenseTransactionType">Transaction Type:</label>
+                <select class="form-control" id="expenseTransactionType" name="expenseTransactionType" required>
+                    <option value="CASH">Cash</option>
+                    <option value="CREDIT_CARD">Credit Card</option>
+                    <option value="DEBIT_CARD">Debit Card</option>
+                    <option value="NET_BANKING">Net Banking</option>
+                    <option value="ONLINE">Online</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Expense</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

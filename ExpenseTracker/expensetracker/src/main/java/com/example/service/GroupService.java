@@ -7,12 +7,12 @@ import com.example.model.User;
 import com.example.repository.ExpenseGroupRepository;
 import com.example.repository.GroupExpenseRepository;
 import com.example.repository.GroupMemberRepository;
+import com.example.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class GroupService {
@@ -26,34 +26,36 @@ public class GroupService {
     @Autowired
     private GroupMemberRepository groupMemberRepository;
 
-    @Transactional
-    public ExpenseGroup createGroup(Long userId, String groupName) {
-        ExpenseGroup group = new ExpenseGroup();
-        group.setGroupName(groupName);
-        // TODO: Fetch user from UserRepository
-        // User user = userRepository.findById(userId).orElse(null);
-        // group.setUser(user);
-        return expenseGroupRepository.save(group);
+    @Autowired
+    private UserRepository userRepository;
+
+    @Transactional(readOnly = true)
+    public List<ExpenseGroup> getAllGroups() {
+        return expenseGroupRepository.findAll();
     }
 
     @Transactional
     public void addMemberToGroup(Long groupId, Long userId) {
-        Optional<ExpenseGroup> groupOptional = expenseGroupRepository.findById(groupId);
-        // TODO: Fetch user from UserRepository
-        // User user = userRepository.findById(userId).orElse(null);
-
-        if (groupOptional.isPresent()) {
-            ExpenseGroup group = groupOptional.get();
-            GroupMember member = new GroupMember();
-            member.setExpenseGroup(group);
-            // member.setUser(user);
-            groupMemberRepository.save(member);
-        }
+        ExpenseGroup group = expenseGroupRepository.findById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("Group not found with ID: " + groupId));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
+        GroupMember member = new GroupMember();
+        member.setExpenseGroup(group);
+        member.setUser(user);
+        groupMemberRepository.save(member);
     }
 
     @Transactional
-    public void deleteMemberFromGroup(Long memberId) {
-        groupMemberRepository.deleteById(memberId);
+    public void quitGroup(Long groupId, Long userId) {
+        groupMemberRepository.deleteByExpenseGroup_GroupIdAndUserId(groupId, userId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ExpenseGroup> getGroupsByUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
+        return expenseGroupRepository.findByUser(user);
     }
 
     @Transactional(readOnly = true)
@@ -61,29 +63,32 @@ public class GroupService {
         return groupMemberRepository.findAllByExpenseGroup_GroupId(groupId);
     }
 
-    @Transactional(readOnly = true)
-    public List<ExpenseGroup> getGroupsByUser(Long userId) {
-        // TODO: Fetch user from UserRepository
-        // User user = userRepository.findById(userId).orElse(null);
-        // return expenseGroupRepository.findByUser(user);
-        return expenseGroupRepository.findAll(); // Placeholder; replace with actual implementation
-    }
-
     @Transactional
-    public void quitGroup(Long groupId, Long userId) {
-        // You might want to add additional logic to prevent the group creator from
-        // quitting
-        deleteMemberFromGroup(userId);
-    }
+    public void addMembersToGroup(Long groupId, List<Long> memberIds) {
+        ExpenseGroup group = expenseGroupRepository.findById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("Group not found with ID: " + groupId));
 
-    @Transactional
-    public void addExpenseToGroup(Long groupId, GroupExpense expense) {
-        Optional<ExpenseGroup> groupOptional = expenseGroupRepository.findById(groupId);
-        if (groupOptional.isPresent()) {
-            ExpenseGroup group = groupOptional.get();
-            expense.setExpenseGroup(group);
-            groupExpenseRepository.save(expense);
+        List<User> members = userRepository.findAllById(memberIds);
+
+        for (User member : members) {
+            GroupMember groupMember = new GroupMember();
+            groupMember.setExpenseGroup(group);
+            groupMember.setUser(member);
+            groupMemberRepository.save(groupMember);
         }
+        System.out.println(groupId);
+    }
+
+    @Transactional
+    public void addUserToGroup(Long groupId, Long userId) {
+        ExpenseGroup group = expenseGroupRepository.findById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("Group not found with ID: " + groupId));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
+        GroupMember member = new GroupMember();
+        member.setExpenseGroup(group);
+        member.setUser(user);
+        groupMemberRepository.save(member);
     }
 
     @Transactional(readOnly = true)
@@ -92,12 +97,46 @@ public class GroupService {
     }
 
     @Transactional
-    public void deleteExpenseFromGroup(Long expenseId) {
-        groupExpenseRepository.deleteById(expenseId);
+    public void addExpenseToGroup(Long groupId, GroupExpense expense) {
+        try {
+            ExpenseGroup group = expenseGroupRepository.findById(groupId)
+                    .orElseThrow(() -> new IllegalArgumentException("Group not found with ID: " + groupId));
+
+            expense.setExpenseGroup(group);
+
+            // Save the expense to the database
+            groupExpenseRepository.save(expense);
+
+            // Log success
+            System.out.println("Expense added successfully to group with ID: " + groupId);
+
+        } catch (Exception e) {
+            // Log the exception
+            System.err.println("Error adding expense to group with ID: " + groupId);
+            e.printStackTrace();
+            throw new RuntimeException("Failed to add expense to group with ID: " + groupId, e);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public ExpenseGroup getGroupById(Long groupId) {
+        return expenseGroupRepository.findById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("Group not found with ID: " + groupId));
     }
 
     @Transactional
-    public void editExpenseFromGroup(GroupExpense expense) {
-        groupExpenseRepository.save(expense);
+    public ExpenseGroup createGroup(Long userId, String groupName) {
+        // Retrieve the user by ID
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
+
+        // Create a new expense group
+        ExpenseGroup group = new ExpenseGroup();
+        group.setGroupName(groupName);
+        group.setUser(user);
+
+        // Save the group to the database
+        return expenseGroupRepository.save(group);
     }
+
 }
