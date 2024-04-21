@@ -29,5 +29,10 @@ public Budget updateBudget(Long budgetId, Budget budgetDetails) {
     budget.setMonthlyBudget(budgetDetails.getMonthlyBudget()); // Ensure monthlyBudget is not null
     return budgetRepository.save(budget);
 }
+@Override
+    public Budget createBudget(Budget budget) {
+        return budgetRepository.save(budget);
+    }
+
 
 }

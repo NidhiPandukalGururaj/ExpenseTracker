@@ -6,12 +6,11 @@
     <title>Manage Monthly Budget</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <style>
-     
         body {
-      font-family: 'Segoe Script', 'Lucida Handwriting', cursive; /* Use calligraphic fonts */
-      color: black; /* Set text color to black */
-      background-color: #f8f9fa; /* Set background color to light grey */
-    }
+            font-family: 'Segoe Script', 'Lucida Handwriting', cursive;
+            color: black;
+            background-color: #f8f9fa;
+        }
         .container {
             width: 90%;
             margin: 20px auto;
@@ -50,6 +49,7 @@
                     <div class="form-group col-md-6">
                         <label for="category">Category</label>
                         <select id="category" name="category" class="form-control">
+                            <option value="">Select Category</option>
                             <option value="RENT">Rent</option>
                             <option value="UTILITY">Utility</option>
                             <option value="VEHICLE">Vehicle</option>
@@ -91,13 +91,19 @@
                 const category = document.getElementById('category').value;
                 const monthlyBudget = document.getElementById('monthly_budget').value;
 
+                if (!category) {
+                    alert('Please select a category.');
+                    return;
+                }
+
                 const formData = {
+                    userId: userId,
                     category: category,
                     monthlyBudget: parseFloat(monthlyBudget)
                 };
 
                 const method = budgetId ? 'PUT' : 'POST';
-                const url = budgetId ? '/budgets/' + budgetId : '/budgets/set';
+                const url = budgetId ? '/budgets/' + budgetId : '/budgets/';
 
                 fetch(url, {
                     method: method,

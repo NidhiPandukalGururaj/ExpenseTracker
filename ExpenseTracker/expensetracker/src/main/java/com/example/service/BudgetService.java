@@ -7,4 +7,5 @@ import java.util.List;
 public interface BudgetService {
     List<Budget> findAllBudgetsByUserId(Long userId);
     Budget updateBudget(Long budgetId, Budget budgetDetails);
+    Budget createBudget(Budget budget);
 }

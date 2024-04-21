@@ -26,4 +26,10 @@ public class BudgetController {
         Budget updatedBudget = budgetService.updateBudget(budgetId, budgetDetails);
         return ResponseEntity.ok().body(updatedBudget);
     }
+
+    @PostMapping("/")
+    public ResponseEntity<Budget> createBudget(@RequestBody Budget budget) {
+        Budget newBudget = budgetService.createBudget(budget);
+        return ResponseEntity.ok().body(newBudget);
+    }
 }
