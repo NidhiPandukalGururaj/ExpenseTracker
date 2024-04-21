@@ -143,10 +143,43 @@
           window.location.href = '/register';
       }
     });
+  var userId = localStorage.getItem('user_id');
+  
+  if (userId) {
+    // Update the URLs with userId
+    var incomeSourcesUrl = "/income-sources/user/" + userId;
+    $('#incomeSourcesLink').attr('href', incomeSourcesUrl);
+  } else {
+    // Redirect to the registration page if userId is not found
+    window.location.href = '/register';
+  }
 
-    $(document).ready(function() {
-      $('#notificationModal').modal('show');
-    });
+
+$(document).ready(function() {
+  var userId = localStorage.getItem('user_id');
+  
+  if (userId) {
+    // Construct the URLs with userId
+    const viewExpensesUrl = `/expenses/all/${userId}`;
+    const notificationUrl = `/expenses/notifications/${userId}`;
+    
+    console.log('Constructed view expenses URL:', viewExpensesUrl); // Debugging statement
+    console.log('Constructed notification URL:', notificationUrl); // Debugging statement
+    
+    // Update the href attributes of the existing links
+    $('[href="/expenses/all"]').attr('href', viewExpensesUrl);
+    $('[href="/expenses/notifications"]').attr('href', notificationUrl);
+    
+    console.log('Updated view expenses href:', $('[href="/expenses/all"]').attr('href')); // Debugging statement
+    console.log('Updated notification href:', $('[href="/expenses/notifications"]').attr('href')); // Debugging statement
+  } else {
+    console.log('userId not found'); // Debugging statement
+  }
+
+  $('#notificationModal').modal('show');
+});
+
   </script>
+  
 </body>
 </html>
