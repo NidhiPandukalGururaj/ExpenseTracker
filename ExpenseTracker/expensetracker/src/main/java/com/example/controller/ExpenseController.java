@@ -8,6 +8,7 @@ import com.example.repository.IncomeSourceRepository;
 import com.example.notification.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,14 +21,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Arrays;
 import org.springframework.web.bind.annotation.GetMapping;
+import com.example.service.ExpenseService;
+
 
 @Controller
+// @RestController
 @RequestMapping("/expenses")
 @CrossOrigin
 public class ExpenseController {
 
     @Autowired
     private ExpenseRepository expenseRepository;
+    @Autowired
+    private ExpenseService expenseService;
+
     @Autowired
     private IncomeSourceRepository incomeRepository;
 
@@ -149,4 +156,11 @@ public class ExpenseController {
         return "error";
     }
 
+    @GetMapping("/user/{userId}")
+    @ResponseBody
+    public ResponseEntity<List<Expense>> getExpensesByUserId(@PathVariable Long userId) {
+        List<Expense> expenses = expenseService.getExpensesByUserId(userId);
+        return ResponseEntity.ok(expenses);
+    }
+    
 }

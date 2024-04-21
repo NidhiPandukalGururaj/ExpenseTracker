@@ -133,6 +133,16 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
+      if (!localStorage.getItem('logged')) {
+          window.location.href = '/login';
+      }
+      var userId = localStorage.getItem('user_id');
+      if (userId) {
+        $('#incomeSourcesLink').attr('href', '/income-sources/user/' + userId);
+      } else {
+          window.location.href = '/register';
+      }
+    });
   var userId = localStorage.getItem('user_id');
   
   if (userId) {
@@ -143,7 +153,7 @@
     // Redirect to the registration page if userId is not found
     window.location.href = '/register';
   }
-});
+
 
 $(document).ready(function() {
   var userId = localStorage.getItem('user_id');

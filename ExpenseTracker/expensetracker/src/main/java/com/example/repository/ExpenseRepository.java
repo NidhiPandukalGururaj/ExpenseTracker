@@ -17,4 +17,8 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
 
     boolean existsByExpenseCategoryAndExpenseDateBefore(ExpenseCategory category, Date date);
 
+    List<Expense> findExpensesByUserId(Long userId);
+
+    // List<Expense> findExpenseSummaryByUserIdAndDateRange(Long userId, Date startDate, Date endDate);
+
 }

@@ -42,4 +42,25 @@ public class AuthController {
         // Add logic to retrieve profile data and add it to the model if needed
         return "profile";  // This corresponds to src/main/resources/templates/profile.html
     }
+
+     /**
+     * Handle GET requests for the profile page.
+     * @param model Model object to pass data to the view.
+     * @return the name of the Thymeleaf template to render the profile view.
+     */
+    @GetMapping("/report")
+    public String showreportPage(Model model) {
+        // Add logic to retrieve profile data and add it to the model if needed
+        return "report";  // This corresponds to src/main/resources/templates/profile.html
+    }
+     /**
+     * Handle GET requests for the profile page.
+     * @param model Model object to pass data to the view.
+     * @return the name of the Thymeleaf template to render the profile view.
+     */
+    @GetMapping("/setbudget")
+    public String setBudget(Model model) {
+        // Add logic to retrieve profile data and add it to the model if needed
+        return "budget";  // This corresponds to src/main/resources/templates/profile.html
+    }
 }

@@ -34,4 +34,14 @@ public class ExpenseRepositoryImplementation {
                 .setParameter("endDate", endDate)
                 .getResultList();
     }
+    public List<Expense> findExpenseSummaryByUserAndDateRange(Long userId, Date startDate, Date endDate) {
+        return entityManager.createQuery(
+                "SELECT e FROM Expense e WHERE e.userId = :userId AND e.expenseDate BETWEEN :startDate AND :endDate",
+                Expense.class)
+                .setParameter("userId", userId)
+                .setParameter("startDate", startDate)
+                .setParameter("endDate", endDate)
+                .getResultList();
+    }
+    
 }
