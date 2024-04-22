@@ -23,7 +23,6 @@ import java.util.Arrays;
 import org.springframework.web.bind.annotation.GetMapping;
 import com.example.service.ExpenseService;
 
-
 @Controller
 // @RestController
 @RequestMapping("/expenses")
@@ -162,5 +161,14 @@ public class ExpenseController {
         List<Expense> expenses = expenseService.getExpensesByUserId(userId);
         return ResponseEntity.ok(expenses);
     }
-    
+
+    @GetMapping("/report")
+    public String showReportForm(Expense expense) {
+        return "report";
+    }
+
+    @GetMapping("/virtualise")
+    public String showVirtualization(Expense expense) {
+        return "virtualise";
+    }
 }

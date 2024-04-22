@@ -125,6 +125,29 @@
           </div>
         </div>
       </div>
+      <div class="row mt-3"> <!-- Added margin-top for space between rows -->
+      <!-- Third Card -->
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title text-dark">Report</h5>
+            <p class="card-text text-muted">View your monthly report.</p>
+            <a href="/expenses/report" class="btn">View</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fourth Card -->
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title text-dark">Virtualisation</h5>
+            <p class="card-text text-muted">Visualise your expenses.</p>
+            <a href="/expenses/virtualise" class="btn">View</a>
+          </div>
+        </div>
+      </div>
+    </div> 
     </div>
   </div>
 
@@ -184,6 +207,7 @@ document.querySelector('#logoutLink').addEventListener('click', function(event) 
   localStorage.removeItem('user_id');
   window.location.href = '/register';
 });
+
   </script>
   
 </body>
