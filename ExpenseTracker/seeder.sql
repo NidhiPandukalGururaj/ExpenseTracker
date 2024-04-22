@@ -125,3 +125,7 @@ VALUES
     (1, 'Freelancing', 20000.00),
     (1, 'Dividends', 3000.00),
     (1, 'Rental Income', 12000.00);
+
+
+ALTER TABLE users
+ADD salt VARCHAR(32); 

@@ -98,6 +98,7 @@
                     if (data.hasOwnProperty('userId')) {
                         // Set the flag in localStorage to indicate that the user is logged in
                         localStorage.setItem("logged", "true");
+                        localStorage.setItem("user_id",data.userId)
                         window.location.href = "/";
                     } else {
                         alert("Login failed. Please check your credentials.");

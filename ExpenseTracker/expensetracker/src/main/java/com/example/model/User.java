@@ -29,8 +29,11 @@ public class User {
     @Column(name = "gender", nullable = false)
     private Gender gender;
 
+    @Column(name = "salt", nullable = false)
+    private String salt;
+
     // Constructor
-    public User(Long userId, String userName, String firstName, String lastName, String email, String password, Gender gender) {
+    public User(Long userId, String userName, String firstName, String lastName, String email, String password, Gender gender, String salt) {
         this.userId = userId;
         this.userName = userName;
         this.firstName = firstName;
@@ -38,6 +41,7 @@ public class User {
         this.email = email;
         this.password = password;
         this.gender = gender;
+        this.salt=salt;
     }
 
     // No-arg constructor
@@ -98,5 +102,13 @@ public class User {
 
     public void setGender(Gender gender) {
         this.gender = gender;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 }

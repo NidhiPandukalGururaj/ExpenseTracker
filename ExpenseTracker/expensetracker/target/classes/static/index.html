@@ -58,7 +58,7 @@
             <a class="nav-link" href="/setbudget">Budget Overview</a>
           </li>
           <li class="nav-item" style="display: block; border: #1e84ea;">
-            <a class="nav-link" href="/logout">Logout</a>
+            <a id="logoutLink" class="nav-link" href="/logout">Logout</a>
           </li>
         </ul>
       </div>
@@ -178,7 +178,12 @@ $(document).ready(function() {
 
   $('#notificationModal').modal('show');
 });
-
+document.querySelector('#logoutLink').addEventListener('click', function(event) {
+  event.preventDefault();
+  localStorage.removeItem('logged');
+  localStorage.removeItem('user_id');
+  window.location.href = '/register';
+});
   </script>
   
 </body>
